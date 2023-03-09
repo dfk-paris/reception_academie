@@ -1,0 +1,36 @@
+{
+  "devDependencies": {
+    "@babel/core": "^7.17.8",
+    "@babel/preset-env": "^7.16.11",
+    "@dfk-paris/frontend": "../../dfk-frontend/src",
+    "@popperjs/core": "^2.10.2",
+    "@riotjs/cli": "^6.1.0",
+    "@riotjs/compiler": "^6.3.2",
+    "@rollup/plugin-babel": "^5.3.1",
+    "@rollup/plugin-commonjs": "^22.0.2",
+    "@rollup/plugin-node-resolve": "^14.1.0",
+    "@wendig/lib": "../../js-lib/src",
+    "concurrently": "^7.4.0",
+    "dotenv": "^16.0.3",
+    "ejs": "^3.1.8",
+    "feather-icons": "^4.29.0",
+    "live-server": "^1.2.2",
+    "riot": "^7.1.0",
+    "rollup": "^2.79.1",
+    "rollup-plugin-dotenv": "^0.4.0",
+    "rollup-plugin-riot": "^6.0.0",
+    "sass": "^1.45.0"
+  },
+  "scripts": {
+    "dev": "concurrently \"npm:dev-html\" \"npm:dev-js\" \"npm:dev-css\" \"npm:dev-server\"",
+    "test": "bundle exec ruby -Ilib:test test/integration.rb",
+    "build": "npm run build-js && npm run build-css",
+    "dev-html": "ejs frontend/index.html.ejs -o public/index.html",
+    "dev-js": "rollup -c -w --no-watch.clearScreen",
+    "dev-css": "sass -c -w --update --source-map -I ./node_modules frontend/demo.scss public/demo.css",
+    "dev-server": "live-server --host=127.0.0.1 --port=4000 --no-browser ./public",
+    "build-js": "rollup -c --environment NODE_ENV:production",
+    "build-css": "sass -c --style=compressed -I ./node_modules frontend/app.scss _site/app.css",
+    "import": "bundle exec bin/import"
+  }
+}

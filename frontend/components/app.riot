@@ -1,0 +1,167 @@
+<app>
+  <h1></h1>
+
+  <h2>{cap(t('ra'))}</h2>
+
+  <div class="d-flex">
+    <div class="w-30">
+      <search
+        criteria={state.criteria}
+        results={state.results}
+        on-input={onInput}
+      />
+    </div>
+    <div class="w-70 ml-5">
+      <template if={state.results}>
+        <div class="d-flex">
+          <div class="w-10">{state.results.total}</div>
+          <dfk-pagination
+            class="w-70 mb-5"
+            page={state.results.page}
+            per-page={state.results.per_page}
+            total={state.results.total}
+            page-to={onInput}
+          />
+        </div>
+        
+        <results
+          results={state.results}
+          on-input={onInput}
+        />
+      </template>
+    </div>
+  </div>
+
+  <routed-modal
+    if={state.results}
+    first-id={firstId()}
+    last-id={lastId()}
+    to-previous-record={toPreviousRecord}
+    to-next-record={toNextRecord}
+  />
+
+  <fly-in />
+
+  <script>
+    import {UrlSearch, Url} from '@wendig/lib'
+    import search from '../lib/search.instance'
+    import {open, indexFor, params} from '../lib/util'
+
+    export default class {
+      constructor() {
+        this.onSearch = this.onSearch.bind(this)
+        // this.open = this.open.bind(this)
+
+        this.toPreviousRecord = this.toPreviousRecord.bind(this)
+        this.toNextRecord = this.toNextRecord.bind(this)
+        // this.isFirst = this.isFirst.bind(this)
+        // this.isLast = this.isLast.bind(this)
+
+        this.urlSearch = new UrlSearch(this, params)
+      }
+
+      onBeforeMount() {
+        this.urlSearch.setup()
+
+        this.on('to-previous-record', this.toPreviousRecord)
+        this.on('to-next-record', this.toNextRecord)
+      }
+
+      onSearch(p) {
+        // if (this.tags) {
+        //   const input = this.tags['live-search'][0]
+        //   input.reset()
+        // }
+
+        search.query(p).then(data => {
+          this.update({
+            results: data
+          })
+
+          const i = this.state['open']
+          if (i != undefined) {
+            delete this.state['open']
+            const record = this.state.results.results[i]
+            open(record)
+
+            this.state.transitioning = false
+          }
+        })
+      }
+
+      firstId() {
+        const response = this.state.results
+
+        if (!response) return null
+        if (response.total == 0) return null
+        if (response.page > 1) return null
+
+        return response.results[0].id
+      }
+
+      lastId() {
+        const response = this.state.results
+
+        if (!response) return null
+        if (response.total == 0) return null
+        const pages = Math.ceil(response.total / response.per_page)
+        if (response.page < pages) return null
+
+        const i = response.results.length - 1
+        return response.results[i].id
+      }
+
+      toPreviousRecord(id) {
+        // prevent race-conditions
+        if (this.state.transitioning == true) return
+        this.state.transitioning = true
+
+        const response = this.state.results
+        const index = indexFor(response, id)
+        const p = params()
+
+        if (index == 0) {
+          if (p['page'] > 1) {
+            // paginate to previous page of results and open last result when
+            // loaded
+            this.state.open = p['per_page'] - 1
+            this.bus.emit('to-previous-page')
+          } else {
+            this.state.transitioning = false
+          }
+        } else {
+          const record = response.results[index - 1]
+          open(record)
+          this.state.transitioning = false
+        }
+      }
+
+      toNextRecord(id) {
+        // prevent race-conditions
+        if (this.state.transitioning == true) return
+        this.state.transitioning = true
+
+        const response = this.state.results
+        const index = indexFor(response, id)
+        const p = params()
+
+        if (index == response.results.length - 1) {
+          const pages = Math.ceil(response.total / response.per_page)
+          if (p['page'] < pages) {
+            // paginate to next page of results and open first result when
+            // loaded
+            this.state.open = 0
+            this.bus.emit('to-next-page')
+          } else {
+            this.state.transitioning = false
+          }
+        } else {
+          const record = response.results[index + 1]
+          console.log(record, response, index)
+          open(record)
+          this.state.transitioning = false
+        }
+      }
+    }
+  </script>
+</app>

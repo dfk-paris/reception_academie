@@ -1,0 +1,187 @@
+<dfkv-search-form>
+  <a
+    class="dfkv-reset float-right fw-bold"
+    href="#!"
+  >{t('reset')}</a>
+  <div class="dfk-sans-serif fw-bold mb-4">
+    {cap(t('search_criteria'))}
+  </div>
+
+  <dfk-input
+    placeholder={cap(t('fulltext_search'))}
+    type="text"
+    name="terms"
+    update-handler={onInputDelayed}
+    value={props.criteria.terms}
+  />
+
+  <div if={hasActiveFilters()} class="dfkv-active-filters">
+    <div class="dfkv-bar"></div>
+    <div class="dfk-sans-serif fw-bold my-4 fs-2">{cap(t('your_selection'))}</div>
+
+    <dfk-active-filters
+      criteria={props.criteria}
+      params={['type', 'medium', 'technique', 'inventory', 'artist', 'collection']}
+      translate-keys={true}
+      remove-filter={(param, value) => removeFilter(param, value)}
+    />
+  </div>
+
+  <div class="dfk-sans-serif fw-bold my-6 fs-2">{cap(t('filters'))}</div>
+
+  <dfk-facet
+    if={props.results}
+    name={cap(t('inventory'))}
+    aggregation={props.results.buckets.inventory}
+    add-filter={newFilter => addFilter(newFilter)}
+    type={'inventory'}
+    class="d-block mb-6"
+  />
+
+  <dfk-facet
+    if={props.results}
+    name={cap(t('type'))}
+    aggregation={props.results.buckets.type}
+    add-filter={newFilter => addFilter(newFilter)}
+    type={'type'}
+    class="d-block mb-6"
+  />
+
+  <dfk-facet
+    if={props.results}
+    name={cap(t('medium'))}
+    aggregation={props.results.buckets.medium}
+    add-filter={newFilter => addFilter(newFilter)}
+    type={'medium'}
+    class="d-block mb-6"
+  />
+
+  <dfk-facet
+    if={props.results}
+    name={cap(t('collection'))}
+    aggregation={props.results.buckets.collection}
+    add-filter={newFilter => addFilter(newFilter)}
+    type={'collection'}
+    class="d-block mb-6"
+  />
+
+  <dfk-facet
+    if={props.results}
+    name={cap(t('artists'))}
+    aggregation={props.results.buckets.artists}
+    add-filter={newFilter => addFilter(newFilter)}
+    type={'artist'}
+    class="d-block mb-6"
+  />
+
+  <script>
+    // import {i18n, Url} from '@wendig/lib'
+    import {util} from '@wendig/lib'
+
+    // import search from '../lib/search'
+
+    // import ActiveFilters from './active_filters.riot'
+    // import Input from './input.riot'
+    // import RangeControl from './range_control.riot'
+    // import Facet from './facet.riot'
+
+    export default class {
+
+      constructor() {
+        // this.delayedUpdateUrl = this.delayedUpdateUrl.bind(this)
+        // this.updateUrl = this.updateUrl.bind(this)
+
+        // this.onInputDelayed = util.delay(this., 300)
+      }
+
+      onBeforeMount(props) {
+        this.onInputDelayed = util.delay(props.onInput, 300)
+      }
+
+    //   static components = {
+    //     'dfk-active-filters': ActiveFilters,
+    //     'dfk-facet': Facet,
+    //     'dfk-input': Input,
+    //     'dfk-range-control': RangeControl,
+    //   }
+
+    //   constructor() {
+        // this.delayedUpdateUrl = this.delayedUpdateUrl.bind(this)
+        // this.updateUrl = this.updateUrl.bind(this)
+    //     this.personIdLabel = this.personIdLabel.bind(this)
+
+    //     this.t = i18n.translate
+    //   }
+
+
+
+
+    //   firstYear() {
+    //     const buckets = this.props.results.aggregations().year.buckets
+    //     return buckets[0] ? parseInt(buckets[0].key_as_string) : 1842
+    //   }
+
+    //   lastYear() {
+    //     const buckets = this.props.results.aggregations().year.buckets
+    //     const last = buckets[buckets.length - 1]
+    //     return last ? parseInt(last.key_as_string) : 1978
+    //   }
+
+      addFilter(value) {
+        for (const [k, v] of Object.entries(value)) {
+          let current = this.props.criteria[k]
+          current = current ? current.split('|') : []
+          const index = current.indexOf(v)
+
+          console.log(current, index, value)
+
+          if (index == -1) {
+            current.push(v)
+            this.props.onInput({[k]: current.join('|')})
+          }
+        }
+      }
+
+      removeFilter(value) {
+        this.props.onInput(value)
+      }
+
+      // removeFilter(param, value) {
+      //   let current = this.props.criteria[param]
+      //   current = (current ? current.split('|') : [])
+      //   const index = current.indexOf(value)
+
+      //   if (index != -1) {
+      //     current.splice(index, 1)
+      //     const newValue = (current.length == 0 ? null : current.join('|'))
+      //     this.props.onInput({[param]: newValue})
+      //   }
+      // }
+
+      hasActiveFilters() {
+        const keys = [
+          'type', 'technique', 'medium', 'collection', 'artist', 'inventory'
+        ]
+
+        for (const k of keys) {
+          if (this.props.criteria[k]) return true
+        }
+
+
+        return false
+      }
+
+    //   personIdLabel(value) {
+    //     return this.props.criteria.person_id_label
+    //   }
+
+      // clearSearch(event) {
+      //   event.preventDefault()
+
+      //   const url = Url.current()
+      //   url.setHashParams({})
+      //   url.apply()
+      // }
+    }
+  </script>
+</dfkv-search-form>

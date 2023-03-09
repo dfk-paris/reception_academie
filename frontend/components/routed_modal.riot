@@ -1,0 +1,56 @@
+<routed-modal>
+  <dfk-routed-modal
+    routes={routes()}
+    props={props}
+    class="p-print-0"
+  ><fly-in /></dfk-routed-modal>
+
+  <script>
+    import {util} from '@wendig/lib'
+
+    import DfkRoutedModal from '@dfk-paris/frontend/src/components/routed_modal.riot'
+
+    import Record from './record.riot'
+
+    export default class {
+      static components = {
+        'dfk-routed-modal': DfkRoutedModal
+      }
+      
+      routes() {
+        return [
+          {url: /^$/, component: null},
+          {url: /^\/records\/(?<id>\d+)$/, component: Record}
+        ]
+      }
+
+      onMounted() {
+        const element = this.root.querySelector('dfk-routed-modal')
+        document.querySelector('body').append(element)
+      }
+
+      // onComponentMounted() {
+        // document.querySelector('body').classList.add('dfkv-has-modal')
+
+        // this.compensateForScrollBar()
+      // }
+
+      // onComponentUnmounted() {
+        // document.querySelector('body').classList.remove('dfkv-has-modal')
+
+        // this.compensateForScrollBar(false)
+      // }
+
+      // apply scroll bar width to offset for fly-in (otherwise the dialog
+      // scroll bar isn't visible)
+      // compensateForScrollBar(activate = true) {
+      //   const dialog = document.body.querySelector('dfk-routed-modal')
+      //   const width = activate ? (dialog.offsetWidth - dialog.clientWidth) : '0'
+      //   document.documentElement.style.setProperty(
+      //     '--fly-in-offset-right', `${width}px`
+      //   )
+      // }
+
+    }
+  </script>
+</routed-modal>

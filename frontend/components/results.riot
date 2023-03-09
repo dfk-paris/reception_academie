@@ -1,0 +1,43 @@
+<results>
+  <div if={props.results} class="d-flex flex-wrap mxn-4">
+    <div each={item in items()} class="result w-40 px-4 pb-4 mb-3">
+      <a
+        href="#/records/{item.id()}"
+        onclick={event => open(item, event)}
+      >
+        <img if={item.hasImage()} src={item.imageUrl()} class="w-100" />
+        <div if={!item.hasImage()} class="w-100 dummy {item.orientation()}" />
+      </a>
+
+      <dims orientation={item.orientation()} size-class={item.dimClass()} />
+
+      <div class="mt-3 mb-5">
+        <strong>{item.title()}</strong>.<br />
+        {item.artistList()}
+        {item.date()}
+      </div>
+    </div>
+  </div>
+
+  <script>
+    import {Url, i18n} from '@wendig/lib'
+    import {open} from '../lib/util'
+    import Item from '../lib/item'
+
+    export default class {
+      onBeforeMount() {
+        this.open = open.bind(this)
+      }
+
+      items() {
+        return this.props.results.results.map(e => {
+          return new Item(e)
+        })
+      }
+
+      locale() {
+        return i18n.locale
+      }
+    }
+  </script>
+</results>

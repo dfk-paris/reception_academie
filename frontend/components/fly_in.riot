@@ -1,0 +1,89 @@
+<fly-in>
+  <dfk-fly-in open={state.open}>
+    <div class="fly-in-open h-100">
+      <div class="h-100 d-flex align-items-center">
+        <a
+          class="ml-4"
+          onclick={event => toggle(event)}
+        >
+          <dfk-icon type="arrow-right" />
+        </a>
+        <div class="h-100 w-100 ml-6 overflow-y-scroll">
+          <h2 class="mt-7">{cap(t('help'))}</h2>
+
+          <ul class="pl-0 ml-0 mt-6 mr-7 mb-7">
+            <li class="d-flex">
+              <div class="item fw-bold">{cap(t('inventories_and_rooms'))}</div>
+              <div class="description" data-id="i_and_r"></div>
+            </li>
+
+            <li class="d-flex">
+              <div class="item">
+                <dims orientation="portrait" />
+              </div>
+              <div class="description" data-id="dims"></div>
+            </li>
+
+            <li class="d-flex">
+              <div class="item fw-bold">{cap(t('search'))}</div>
+              <div class="description" data-id="search"></div>
+            </li>
+
+            <li class="d-flex">
+              <div class="item">
+                <dfk-icon type="book" />
+              </div>
+              <div class="description" data-id="book"></div>
+            </li>
+
+            <li class="d-flex d-none">
+              <div class="item">TODO</div>
+              <div class="description" data-id="spatial"></div>
+            </li>
+
+            <li class="d-flex">
+              <div class="item">
+                <dfk-icon type="print" />
+              </div>
+              <div class="description" data-id="print"></div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="fly-in-closed">
+      <div class="h-100 d-flex align-items-center p-2">
+        <a
+          class="ml-2"
+          onclick={event => toggle(event)}
+        >
+          <dfk-icon type="arrow-left" />
+        </a>
+      </div>
+    </div>
+  </dfk-fly-in>
+
+  <script>
+    import DfkFlyIn from '@dfk-paris/frontend/src/components/fly_in.riot'
+    export default class {
+      static components = {DfkFlyIn}
+
+      onMounted() {
+        const targets = this.root.querySelectorAll('[data-id]')
+        for (const target of targets) {
+          const id = target.getAttribute('data-id')
+          const text = this.t(`help_${id}`)
+
+          target.innerHTML = text
+        }
+      }
+
+      toggle(event) {
+        event.preventDefault()
+
+        this.update({open: !this.state.open})
+      }
+    }
+  </script>
+</fly-in>

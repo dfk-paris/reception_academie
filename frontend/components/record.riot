@@ -1,0 +1,218 @@
+<record class="pt-5 mr-5">
+  <div class="container" if={state.item}>
+    <div class="d-flex mb-6">
+      <a
+        class="mr-2"
+        onclick={event => bookmark(event)}
+      ><dfk-icon type="bookmark" /></a>
+      <a
+        class="mr-2"
+        onclick={event => print(event)}
+      ><dfk-icon type="print" /></a>
+      <a
+        class="mr-2"
+        onclick={event => download(event)}
+      ><dfk-icon type="braces" /></a>
+    </div>
+
+
+    <a class="close" onclick={event => close(event)}>
+      <dfk-icon type="cross" />
+    </a>
+
+    <div class="header d-flex justify-content-between">
+      <h1>{state.item.title()}</h1>
+      <div>id {state.item.id()}</div>
+
+      <a
+        class="previous"
+        if={props.firstId != state.item.id()}
+        onclick={event => previous(event)}
+      ><dfk-icon type="chevron-left" /></a>
+
+      <a
+        class="next"
+        if={props.lastId != state.item.id()}
+        onclick={event => next(event)}
+      ><dfk-icon type="chevron-right" /></a>
+    </div>
+
+    <div class="d-flex justify-content-between" if={state.item.hasImage()}>
+      <div class="primary">
+        <img class="d-block image" src={primaryUrl()} />
+        <small>{state.item.credits()}</small>
+      </div>
+
+      <div class="secondary d-flex flex-wrap justify-content-end">
+        <img
+          each={url in state.item.additionalUrls()}
+          src={url}
+          class="image ml-2 mb-2 {url == primaryUrl() ? 'active' : ''}"
+          onclick={event => setPrimary(url, event)}
+        />
+      </div>
+    </div>
+
+    <ul class="fields">
+      <li><span>{cap(t('artist'))}</span><strong>{state.item.artistList()}</strong></li>
+      <li><span>{cap(t('date'))}</span><strong>{state.item.date()}</strong></li>
+    </ul>
+
+    <ul class="fields">
+      <li><span>{cap(t('medium'))}</span><strong>{state.item.medium()}</strong></li>
+      <li><span>{cap(t('technique'))}</span><strong>{state.item.technique()}</strong></li>
+      <li><span>{cap(t('dimensions'))}</span><strong>{state.item.dimensions()}</strong></li>
+      <li><span>{cap(t('current_location'))}</span><strong>{state.item.location()}</strong></li>
+      <li>
+        <span>{cap(t('inventory_no'))}</span><strong>{state.item.inventoryNo()}</strong>
+        <a
+          if={state.item.collectionLink()}
+          target="_blank"
+          href={state.item.collectionLink()}
+        ><dfk-icon type="external-link" /></a>
+      </li>
+    </ul>
+
+    <div class="dfk-expose">
+      <ul class="fields">
+        <li><span>{cap(t('type'))}</span><strong>{state.item.type()}</strong></li>
+      </ul>
+
+      <div class="location mt-4">
+        <div
+          each={room in Object.entries(state.item.room())}
+          class="d-flex room"
+        >
+          <div class="label">{cap(t('location'))}</div>
+          <div class="fw-bold mr-5">{room[0]}</div>
+          <div class="fw-bold fst-italic">
+            <div each={e in room[1]}>{e}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sources mt-7">
+        <div class="label">{cap(t('sources'))}</div>
+      </div>
+
+      <div class="links d-flex mt-7">
+        <div class="label">{cap(t('links'))}</div>
+      </div>
+    </div>
+
+    <div class="dfk-expose mt-5">
+      <div class="mb-5">
+        <strong>{cap(t('ref_dataset'))}</strong>
+        <div>
+          Markus A. Castor, Sofya Dmitrieva (Eds.), »Projecttitle [Research Data]«,
+          heiDATA, 2023, https://doi.org/10.11588/DATA/Z#####.
+        </div>
+      </div>
+
+      <div class="mb-5">
+        <strong>{cap(t('ref_entry'))}</strong>
+        <div>
+          Markus A. Castor, Sofya Dmitrieva (Eds.), »ID artwork. Database -
+          Projecttitle [Research Data]«, Paris 2023. URL: https://dfk-paris some
+          adress#/resolve/sources/19532/de/de..
+        </div>
+      </div>
+
+      <div class="mb-5">
+        <strong>{cap(t('contact'))}</strong>
+        <div>
+          This entry represents the results of an ongoing research. We are happy
+          to add and optimize it according to your advice. reach out via:
+          PROJECTTITLE@dfk-paris.org
+        </div>
+      </div>
+
+      <div>
+        <strong>{cap(t('use'))}</strong>
+        <div>
+          The use of the work data and the illustrations is indicated under the
+          link given for each picture. The information on localization and the
+          links to the sources are the result of the research work of the DFK
+          Paris and may be used freely.
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <script>
+    import {Url, i18n, util} from '@wendig/lib'
+
+    import DfkIcon from '@dfk-paris/frontend/src/components/icon.riot'
+
+    import search from '../lib/search.instance'
+    import Item from '../lib/item'
+
+    export default class {
+      static components = {DfkIcon}
+
+      constructor() {
+        this.fetch = this.fetch.bind(this)
+        this.t = i18n.translate
+        this.cap = util.capitalize
+      }
+
+      onBeforeMount() {
+        window.addEventListener('hashchange', this.fetch)
+        this.fetch()
+      }
+
+      onUnmounted() {
+        window.removeEventListener('hashchange', this.fetch)
+      }
+
+      fetch() {
+        const id = parseInt(Url.current().hashPath().split('/')[2])
+
+        search.record(id).then(data => {
+          const record = data.results[0]
+          const item = new Item(record)
+          this.update({item})
+        })
+      }
+
+      previous(event) {
+        event.preventDefault()
+
+        const id = this.state.item.id()
+        this.props.toPreviousRecord(id)
+      }
+
+      next(event) {
+        event.preventDefault()
+
+        const id = this.state.item.id()
+        this.props.toNextRecord(id)
+      }
+
+      primaryUrl() {
+        return this.state.primaryUrl || this.state.item.imageUrl()
+      }
+
+      additionalUrls() {
+        return this.state.item.additionalUrls()
+      }
+
+      setPrimary(url) {
+        this.update({primaryUrl: url})
+      }
+
+      close(event) {
+        event.preventDefault()
+
+        const url = Url.current()
+        url.setHashPath('')
+        url.apply()
+      }
+
+      locale() {
+        return i18n.locale
+      }
+    }
+  </script>
+</record>
