@@ -15,7 +15,6 @@
       ><dfk-icon type="braces" /></a>
     </div>
 
-
     <a class="close" onclick={event => close(event)}>
       <dfk-icon type="cross" />
     </a>
@@ -39,11 +38,22 @@
 
     <div class="d-flex justify-content-between" if={state.item.hasImage()}>
       <div class="primary">
-        <img class="d-block image" src={primaryUrl()} />
+        <div class="d-flex">
+          <img class="d-block image" src={primaryUrl()} />
+
+          <size-indicator
+            wh={state.item.wh()}
+            ref-height={170.0}
+            render-height={100}
+            class="align-self-end ml-7"
+          />
+        </div>
+
+
         <small>{state.item.credits()}</small>
       </div>
 
-      <div class="secondary d-flex flex-wrap justify-content-end">
+      <div class="secondary d-flex flex-wrap justify-content-end align-content-start">
         <img
           each={url in state.item.additionalUrls()}
           src={url}
@@ -63,13 +73,17 @@
       <li><span>{cap(t('technique'))}</span><strong>{state.item.technique()}</strong></li>
       <li><span>{cap(t('dimensions'))}</span><strong>{state.item.dimensions()}</strong></li>
       <li><span>{cap(t('current_location'))}</span><strong>{state.item.location()}</strong></li>
-      <li>
-        <span>{cap(t('inventory_no'))}</span><strong>{state.item.inventoryNo()}</strong>
-        <a
-          if={state.item.collectionLink()}
-          target="_blank"
-          href={state.item.collectionLink()}
-        ><dfk-icon type="external-link" /></a>
+      <li class="inventory-no">
+        <span>{cap(t('inventory_no'))}</span>
+        <span class="csl">
+          <span each={no in state.item.inventoryNo()}>
+            <strong>{no[0]}</strong>
+            <a
+              target="_blank"
+              href={no[1]}
+            ><dfk-icon type="external-link" /></a>
+          </span>
+        </span>
       </li>
     </ul>
 
@@ -91,8 +105,23 @@
         </div>
       </div>
 
-      <div class="sources mt-7">
+      <div class="sources mt-7 d-flex">
         <div class="label">{cap(t('sources'))}</div>
+        <div>
+          <div each={b in state.item.biblio()} class="d-flex">
+            <div class="description">
+              {b.biblio.short_title}, {b.pages}
+            </div>
+
+            <a
+              if={b.manifest}
+              href="https://static.dfkg.org/viewers_poc/mirador/#?manifest={b.manifest}"
+              target="_blank"
+            >
+              <dfk-icon type="book" />
+            </a>
+          </div>
+        </div>
       </div>
 
       <div class="links d-flex mt-7">
@@ -144,12 +173,13 @@
     import {Url, i18n, util} from '@wendig/lib'
 
     import DfkIcon from '@dfk-paris/frontend/src/components/icon.riot'
+    import SizeIndicator from './size_indicator.riot'
 
     import search from '../lib/search.instance'
     import Item from '../lib/item'
 
     export default class {
-      static components = {DfkIcon}
+      static components = {DfkIcon, SizeIndicator}
 
       constructor() {
         this.fetch = this.fetch.bind(this)

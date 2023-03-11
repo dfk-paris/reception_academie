@@ -1,20 +1,25 @@
 <results>
   <div if={props.results} class="d-flex flex-wrap mxn-4">
-    <div each={item in items()} class="result w-40 px-4 pb-4 mb-3">
+    <div each={item in items()} class="result px-4 pb-4 mb-3">
       <a
         href="#/records/{item.id()}"
         onclick={event => open(item, event)}
       >
-        <img if={item.hasImage()} src={item.imageUrl()} class="w-100" />
-        <div if={!item.hasImage()} class="w-100 dummy {item.orientation()}" />
+        <img if={item.hasImage()} src={item.imageUrl()} />
+        <div if={!item.hasImage()} class="dummy {item.orientation()}" />
       </a>
 
-      <dims orientation={item.orientation()} size-class={item.dimClass()} />
+      <div class="caption">
+        <dims orientation={item.orientation()} size-class={item.dimClass()} />
 
-      <div class="mt-3 mb-5">
-        <strong>{item.title()}</strong>.<br />
-        {item.artistList()}
-        {item.date()}
+        <div class="mt-3 mb-5">
+          <strong>{item.title()}</strong>.<br />
+          {item.artistList()},
+          {item.date()}<br />
+          <template if={item.dimensions()}>
+            (<span>{item.dimensions()}</span>)
+          </template>
+        </div>
       </div>
     </div>
   </div>

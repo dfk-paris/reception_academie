@@ -53,6 +53,10 @@ export default class Item {
   }
 
   dimensions() {
+    return this.d['dims_human']
+  }
+
+  wh() {
     return this.d['dims']
   }
 
@@ -66,6 +70,10 @@ export default class Item {
 
   collectionLink() {
     return this.d['collection_link']
+  }
+
+  biblio() {
+    return this.d['biblio']
   }
 
   type() {

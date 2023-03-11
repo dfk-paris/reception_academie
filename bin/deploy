@@ -1,0 +1,10 @@
+#!/bin/bash -e
+
+export APP_ENV=production
+export STATIC_URL="https://static.dfkg.org/ooV9no9ood"
+export USE_SSL="true"
+
+npm run import
+npm run build
+
+rsync -av public/ root@10.10.1.34:/var/storage/host/static/current/ooV9no9ood/

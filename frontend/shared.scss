@@ -10,6 +10,10 @@ dfk-pagination {
 
 dfk-active-filters {
   @extend active-filters;
+
+  .rounded {
+    background-color: #A4A3A3;
+  }
 }
 
 dfk-routed-modal {
@@ -20,16 +24,43 @@ dfk-routed-modal {
 //   @extend [is='icon'];
 // }
 
+dfk-facet[type='inventory'] {
+  .rounded {
+    background-color: #A4A3A3;
+
+  }
+  
+  .label {
+    font-weight: bold;
+  }
+}
+
 results {
+  display: block;
+  width: calc(312px * 2 + 50px);
+
   .result {
+    display: inline-block;
+
+    img {
+      max-width: 312px;
+      max-height: 312px;
+    }
+
     .dummy {
-      height: 30vi;
-      background-color: #aaaaaa;
-      border: 1px solid #333333;
+      width: 232px;
+      height: 232px;
+      background-color: #B1B2B5;
 
       &.landscape {
         height: 15vi;
       }
+    }
+
+    .caption {
+      display: inline-block;
+      width: 0;
+      min-width: 100%;
     }
   }
 }
@@ -90,7 +121,7 @@ results {
     li {
       list-style-type: none;
 
-      span {
+      & > span:first-child {
         display: inline-block;
         width: 150px;
       }
@@ -116,6 +147,31 @@ results {
     }
   }
 
+  .sources {
+    .label {
+      width: 150px;
+    }
+    .description {
+      width: 300px;
+    }
+
+    [is='icon'] {
+      width: auto;
+      position: relative;
+      top: 4px;
+      margin-left: 10px;
+    }
+  }
+
+  // .inventory-no {
+  //   strong::before {
+  //     content: ', '
+  //   }
+
+  //   strong:first-child::before {
+  //     content: ''
+  //   }
+  // }
 }
 
 
@@ -218,9 +274,28 @@ fly-in {
 }
 
 
+// size indicator
+
+size-indicator {
+  .rect {
+    background-color: $tag-gray;
+  }
+}
+
+
 // helpers
 
 .mxn-4 {
   margin-left: -1.5rem;
   margin-right: -1.5rem;
+}
+
+.csl {
+  & > *::before {
+    content: ', ';
+  }
+
+  & > *:first-child::before {
+    content: '';
+  }
 }

@@ -69,3 +69,10 @@ your page:
 ```
 
 The component `app` can be placed anywhere in your page.
+
+
+# Licenses
+
+This project makes use of the following works:
+
+* https://thenounproject.com/icon/gender-neutral-13777/
