@@ -30,7 +30,7 @@
     "dev-css": "sass -c -w --update --source-map -I ./node_modules frontend/demo.scss public/demo.css",
     "dev-server": "live-server --host=127.0.0.1 --port=4000 --no-browser ./public",
     "build-js": "rollup -c --environment NODE_ENV:production",
-    "build-css": "sass -c --style=compressed -I ./node_modules frontend/app.scss _site/app.css",
+    "build-css": "sass -c --style=compressed -I ./node_modules frontend/app.scss public/app.css",
     "import": "bundle exec bin/import"
   }
 }

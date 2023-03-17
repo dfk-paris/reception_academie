@@ -277,6 +277,8 @@ fly-in {
 // size indicator
 
 size-indicator {
+  color: $tag-gray;
+  
   .rect {
     background-color: $tag-gray;
   }

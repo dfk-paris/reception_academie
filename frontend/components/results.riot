@@ -10,10 +10,10 @@
       </a>
 
       <div class="caption">
-        <dims orientation={item.orientation()} size-class={item.dimClass()} />
+        <!-- <dims orientation={item.orientation()} size-class={item.dimClass()} /> -->
 
         <div class="mt-3 mb-5">
-          <strong>{item.title()}</strong>.<br />
+          <strong>{item.title()}</strong><br />
           {item.artistList()},
           {item.date()}<br />
           <template if={item.dimensions()}>
