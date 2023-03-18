@@ -114,8 +114,8 @@
             </div>
 
             <a
-              if={b.manifest}
-              href="https://static.dfkg.org/viewers_poc/mirador/#?manifest={b.manifest}"
+              if={b.biblio['IIIF manifest']}
+              href="https://static.dfkg.org/viewers_poc/mirador/#?manifest={b.biblio['IIIF manifest']}&canvas={b.canvas_id}"
               target="_blank"
             >
               <dfk-icon type="book" />
@@ -202,6 +202,7 @@
         search.record(id).then(data => {
           const record = data.results[0]
           const item = new Item(record)
+          window.i = item
           this.update({item})
         })
       }
