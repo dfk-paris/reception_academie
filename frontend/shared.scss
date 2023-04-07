@@ -1,3 +1,5 @@
+@import 'highlight.js/styles/github';
+
 @import '@dfk-paris/frontend/src/index';
 
 dfk-facet {
@@ -299,5 +301,26 @@ size-indicator {
 
   & > *:first-child::before {
     content: '';
+  }
+}
+
+
+// json popup
+
+dfk-popup.json {
+  pre {
+    max-width: 100%;
+    white-space: pre-wrap;
+    font-size: 14px;
+  }
+}
+
+
+// print
+
+@media print {
+  body {
+    padding-left: 0px !important;
+    padding-right: 0px !important;
   }
 }

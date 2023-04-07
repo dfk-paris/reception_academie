@@ -32,5 +32,8 @@
     "build-js": "rollup -c --environment NODE_ENV:production",
     "build-css": "sass -c --style=compressed -I ./node_modules frontend/app.scss public/app.css",
     "import": "bundle exec bin/import"
+  },
+  "dependencies": {
+    "highlight.js": "^11.7.0"
   }
 }

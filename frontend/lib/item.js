@@ -94,4 +94,8 @@ export default class Item {
 
     return 'large'
   }
+
+  json() {
+    return JSON.stringify(this.d, null, 2)
+  }
 }

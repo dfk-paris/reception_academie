@@ -1,6 +1,6 @@
 <record class="pt-5 mr-5">
   <div class="container" if={state.item}>
-    <div class="d-flex mb-6">
+    <div class="d-flex mb-6 d-print-none">
       <a
         class="mr-2"
         onclick={event => bookmark(event)}
@@ -15,7 +15,7 @@
       ><dfk-icon type="braces" /></a>
     </div>
 
-    <a class="close" onclick={event => close(event)}>
+    <a class="close d-print-none" onclick={event => close(event)}>
       <dfk-icon type="cross" />
     </a>
 
@@ -24,13 +24,13 @@
       <div>id {state.item.id()}</div>
 
       <a
-        class="previous"
+        class="previous d-print-none"
         if={props.firstId != state.item.id()}
         onclick={event => previous(event)}
       ><dfk-icon type="chevron-left" /></a>
 
       <a
-        class="next"
+        class="next d-print-none"
         if={props.lastId != state.item.id()}
         onclick={event => next(event)}
       ><dfk-icon type="chevron-right" /></a>
@@ -168,18 +168,41 @@
     </div>
   </div>
 
+  <dfk-popup class="json" open={state.popup} if={state.item}>
+    <div class="m-6">
+      <div class="d-flex justify-content-between">
+        <div>Data</div>
+        <a onclick={event => closeDownload(event)}>
+          <dfk-icon type="cross" />
+        </a>
+      </div>
+
+      <h2 class="mt-1">JSON</h2>
+      <div>
+        <pre><dfk-raw html={highlight(state.item.json(), 'javascript')} /></pre>
+      </div>
+    </div>
+  </dfk-popup>
+
 
   <script>
+    import javascript from 'highlight.js/lib/languages/javascript'
+    import hljs from 'highlight.js/lib/core'
+
     import {Url, i18n, util} from '@wendig/lib'
 
     import DfkIcon from '@dfk-paris/frontend/src/components/icon.riot'
+    import DfkPopup from '@dfk-paris/frontend/src/components/popup.riot'
+    import DfkRaw from '@dfk-paris/frontend/src/components/raw.riot'
     import SizeIndicator from './size_indicator.riot'
 
     import search from '../lib/search.instance'
     import Item from '../lib/item'
 
+    hljs.registerLanguage('javascript', javascript)
+
     export default class {
-      static components = {DfkIcon, SizeIndicator}
+      static components = {DfkIcon, DfkPopup, DfkRaw, SizeIndicator}
 
       constructor() {
         this.fetch = this.fetch.bind(this)
@@ -239,6 +262,40 @@
         const url = Url.current()
         url.setHashPath('')
         url.apply()
+      }
+
+      print(event) {
+        event.preventDefault()
+
+        const links = document.querySelectorAll("head > link[rel='stylesheet'")
+        let css = ''
+        const promises = [...links].map(e => {
+          const url = e.getAttribute('href')
+          return fetch(url).then(r => r.text()).then(text => {
+            css += `\n${text}`
+          })
+        })
+        Promise.all(promises).then(datas => {
+          console.log(css)
+          util.printElement(this.root.parentElement, {css, print: true})
+        })
+      }
+
+      download(event) {
+        event.preventDefault()
+
+        this.state.popup = !this.state.popup
+        this.update()
+      }
+
+      closeDownload(event) {
+        event.preventDefault()
+
+        this.update({popup: false})
+      }
+
+      highlight(code, language) {
+        return hljs.highlight(code, {language: language}).value
       }
 
       locale() {
