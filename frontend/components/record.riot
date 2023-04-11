@@ -1,301 +1,170 @@
-<record class="pt-5 mr-5">
-  <div class="container" if={state.item}>
-    <div class="d-flex mb-6 d-print-none">
-      <a
-        class="mr-2"
-        onclick={event => bookmark(event)}
-      ><dfk-icon type="bookmark" /></a>
-      <a
-        class="mr-2"
-        onclick={event => print(event)}
-      ><dfk-icon type="print" /></a>
-      <a
-        class="mr-2"
-        onclick={event => download(event)}
-      ><dfk-icon type="braces" /></a>
-    </div>
+<record class="{props.class} pt-5 mr-5">
+  <div class="d-flex justify-content-between">
+    <h1>{props.item.title()}</h1>
+    <div>id {props.item.id()}</div>
+  </div>
 
-    <a class="close d-print-none" onclick={event => close(event)}>
-      <dfk-icon type="cross" />
-    </a>
+  <div class="d-flex justify-content-between" if={props.item.hasImage()}>
+    <div class="primary">
+      <div class="d-flex">
+        <img class="d-block image" src={primaryUrl()} />
 
-    <div class="header d-flex justify-content-between">
-      <h1>{state.item.title()}</h1>
-      <div>id {state.item.id()}</div>
-
-      <a
-        class="previous d-print-none"
-        if={props.firstId != state.item.id()}
-        onclick={event => previous(event)}
-      ><dfk-icon type="chevron-left" /></a>
-
-      <a
-        class="next d-print-none"
-        if={props.lastId != state.item.id()}
-        onclick={event => next(event)}
-      ><dfk-icon type="chevron-right" /></a>
-    </div>
-
-    <div class="d-flex justify-content-between" if={state.item.hasImage()}>
-      <div class="primary">
-        <div class="d-flex">
-          <img class="d-block image" src={primaryUrl()} />
-
-          <size-indicator
-            wh={state.item.wh()}
-            ref-height={170.0}
-            render-height={100}
-            class="align-self-end ml-7"
-          />
-        </div>
-
-
-        <small>{state.item.credits()}</small>
-      </div>
-
-      <div class="secondary d-flex flex-wrap justify-content-end align-content-start">
-        <img
-          each={url in state.item.additionalUrls()}
-          src={url}
-          class="image ml-2 mb-2 {url == primaryUrl() ? 'active' : ''}"
-          onclick={event => setPrimary(url, event)}
+        <size-indicator
+          wh={props.item.wh()}
+          ref-height={170.0}
+          render-height={100}
+          class="align-self-end ml-7"
         />
       </div>
+
+      <small class="d-block mt-2">{props.item.credits()}</small>
     </div>
 
-    <ul class="fields">
-      <li><span>{cap(t('artist'))}</span><strong>{state.item.artistList()}</strong></li>
-      <li><span>{cap(t('date'))}</span><strong>{state.item.date()}</strong></li>
-    </ul>
+    <div class="secondary d-flex flex-wrap justify-content-end align-content-start">
+      <img
+        each={url in props.item.additionalUrls()}
+        src={url}
+        class="image ml-2 mb-2 {url == primaryUrl() ? 'active' : ''}"
+        onclick={event => setPrimary(url, event)}
+      />
+    </div>
+  </div>
 
-    <ul class="fields">
-      <li><span>{cap(t('medium'))}</span><strong>{state.item.medium()}</strong></li>
-      <li><span>{cap(t('technique'))}</span><strong>{state.item.technique()}</strong></li>
-      <li><span>{cap(t('dimensions'))}</span><strong>{state.item.dimensions()}</strong></li>
-      <li><span>{cap(t('current_location'))}</span><strong>{state.item.location()}</strong></li>
-      <li class="inventory-no">
-        <span>{cap(t('inventory_no'))}</span>
-        <span class="csl">
-          <span each={no in state.item.inventoryNo()}>
-            <strong>{no[0]}</strong>
-            <a
-              target="_blank"
-              href={no[1]}
-            ><dfk-icon type="external-link" /></a>
-          </span>
+  <ul class="fields my-4">
+    <li><span>{cap(t('artist'))}</span><strong>{props.item.artistList()}</strong></li>
+    <li><span>{cap(t('date'))}</span><strong>{props.item.date()}</strong></li>
+  </ul>
+
+  <ul class="fields my-4">
+    <li><span>{cap(t('medium'))}</span><strong>{props.item.medium()}</strong></li>
+    <li><span>{cap(t('technique'))}</span><strong>{props.item.technique()}</strong></li>
+    <li><span>{cap(t('dimensions'))}</span><strong>{props.item.dimensions()}</strong></li>
+    <li><span>{cap(t('current_location'))}</span><strong>{props.item.location()}</strong></li>
+    <li class="inventory-no">
+      <span>{cap(t('inventory_no'))}</span>
+      <span class="csl">
+        <span each={no in props.item.inventoryNo()}>
+          <strong>{no[0]}</strong>
+          <a
+            target="_blank"
+            href={no[1]}
+          ><dfk-icon type="external-link" /></a>
         </span>
-      </li>
+      </span>
+    </li>
+  </ul>
+
+  <div class="dfk-expose">
+    <ul class="fields">
+      <li><span>{cap(t('type'))}</span><strong>{props.item.type()}</strong></li>
     </ul>
 
-    <div class="dfk-expose">
-      <ul class="fields">
-        <li><span>{cap(t('type'))}</span><strong>{state.item.type()}</strong></li>
-      </ul>
-
-      <div class="location mt-4">
-        <div
-          each={room in Object.entries(state.item.room())}
-          class="d-flex room"
-        >
-          <div class="label">{cap(t('location'))}</div>
-          <div class="fw-bold mr-5">{room[0]}</div>
-          <div class="fw-bold fst-italic">
-            <div each={e in room[1]}>{e}</div>
-          </div>
+    <div class="location mt-4">
+      <div
+        each={room in Object.entries(props.item.room())}
+        class="d-flex room"
+      >
+        <div class="label">{cap(t('location'))}</div>
+        <div class="fw-bold mr-5">{room[0]}</div>
+        <div class="fw-bold fst-italic">
+          <div each={e in room[1]}>{e}</div>
         </div>
-      </div>
-
-      <div class="sources mt-7 d-flex">
-        <div class="label">{cap(t('sources'))}</div>
-        <div>
-          <div each={b in state.item.biblio()} class="d-flex">
-            <div class="description">
-              {b.biblio.short_title}, {b.pages}
-            </div>
-
-            <a
-              if={b.biblio['IIIF manifest']}
-              href="https://static.dfkg.org/viewers_poc/mirador/#?manifest={b.biblio['IIIF manifest']}&canvas={b.canvas_id}"
-              target="_blank"
-            >
-              <dfk-icon type="book" />
-            </a>
-          </div>
-        </div>
-      </div>
-
-      <div class="links d-flex mt-7">
-        <div class="label">{cap(t('links'))}</div>
       </div>
     </div>
 
-    <div class="dfk-expose mt-5">
-      <div class="mb-5">
-        <strong>{cap(t('ref_dataset'))}</strong>
-        <div>
-          Markus A. Castor, Sofya Dmitrieva (Eds.), »Projecttitle [Research Data]«,
-          heiDATA, 2023, https://doi.org/10.11588/DATA/Z#####.
-        </div>
-      </div>
-
-      <div class="mb-5">
-        <strong>{cap(t('ref_entry'))}</strong>
-        <div>
-          Markus A. Castor, Sofya Dmitrieva (Eds.), »ID artwork. Database -
-          Projecttitle [Research Data]«, Paris 2023. URL: https://dfk-paris some
-          adress#/resolve/sources/19532/de/de..
-        </div>
-      </div>
-
-      <div class="mb-5">
-        <strong>{cap(t('contact'))}</strong>
-        <div>
-          This entry represents the results of an ongoing research. We are happy
-          to add and optimize it according to your advice. reach out via:
-          PROJECTTITLE@dfk-paris.org
-        </div>
-      </div>
-
+    <div class="sources mt-7 d-flex">
+      <div class="label">{cap(t('sources'))}</div>
       <div>
-        <strong>{cap(t('use'))}</strong>
-        <div>
-          The use of the work data and the illustrations is indicated under the
-          link given for each picture. The information on localization and the
-          links to the sources are the result of the research work of the DFK
-          Paris and may be used freely.
+        <div each={b in props.item.biblio()} class="d-flex">
+          <div class="description">
+            {b.biblio.short_title}, {b.pages}
+          </div>
+
+          <a
+            if={b.biblio['IIIF manifest']}
+            href="https://static.dfkg.org/viewers_poc/mirador/#?manifest={b.biblio['IIIF manifest']}&canvas={b.canvas_id}"
+            target="_blank"
+          >
+            <dfk-icon type="book" />
+          </a>
         </div>
+      </div>
+    </div>
+
+    <div class="links d-flex mt-7">
+      <div class="label">{cap(t('links'))}</div>
+    </div>
+  </div>
+
+  <div class="dfk-expose mt-5">
+    <div class="mb-5">
+      <strong>{cap(t('ref_dataset'))}</strong>
+      <div>
+        Markus A. Castor, Sofya Dmitrieva (Eds.), »Projecttitle [Research Data]«,
+        heiDATA, 2023, https://doi.org/10.11588/DATA/Z#####.
+      </div>
+    </div>
+
+    <div class="mb-5">
+      <strong>{cap(t('ref_entry'))}</strong>
+      <div>
+        Markus A. Castor, Sofya Dmitrieva (Eds.), »ID artwork. Database -
+        Projecttitle [Research Data]«, Paris 2023. URL: https://dfk-paris some
+        adress#/resolve/sources/19532/de/de..
+      </div>
+    </div>
+
+    <div class="mb-5">
+      <strong>{cap(t('contact'))}</strong>
+      <div>
+        This entry represents the results of an ongoing research. We are happy
+        to add and optimize it according to your advice. reach out via:
+        PROJECTTITLE@dfk-paris.org
+      </div>
+    </div>
+
+    <div>
+      <strong>{cap(t('use'))}</strong>
+      <div>
+        The use of the work data and the illustrations is indicated under the
+        link given for each picture. The information on localization and the
+        links to the sources are the result of the research work of the DFK
+        Paris and may be used freely.
       </div>
     </div>
   </div>
 
-  <dfk-popup class="json" open={state.popup} if={state.item}>
-    <div class="m-6">
-      <div class="d-flex justify-content-between">
-        <div>Data</div>
-        <a onclick={event => closeDownload(event)}>
-          <dfk-icon type="cross" />
-        </a>
-      </div>
-
-      <h2 class="mt-1">JSON</h2>
-      <div>
-        <pre><dfk-raw html={highlight(state.item.json(), 'javascript')} /></pre>
-      </div>
-    </div>
-  </dfk-popup>
-
-
   <script>
-    import javascript from 'highlight.js/lib/languages/javascript'
-    import hljs from 'highlight.js/lib/core'
-
-    import {Url, i18n, util} from '@wendig/lib'
+    import {i18n, util} from '@wendig/lib'
 
     import DfkIcon from '@dfk-paris/frontend/src/components/icon.riot'
     import DfkPopup from '@dfk-paris/frontend/src/components/popup.riot'
     import DfkRaw from '@dfk-paris/frontend/src/components/raw.riot'
     import SizeIndicator from './size_indicator.riot'
 
-    import search from '../lib/search.instance'
-    import Item from '../lib/item'
-
-    hljs.registerLanguage('javascript', javascript)
-
     export default class {
-      static components = {DfkIcon, DfkPopup, DfkRaw, SizeIndicator}
+      static components = {
+        DfkIcon,
+        DfkPopup,
+        DfkRaw,
+        SizeIndicator
+      }
 
       constructor() {
-        this.fetch = this.fetch.bind(this)
         this.t = i18n.translate
         this.cap = util.capitalize
       }
 
-      onBeforeMount() {
-        window.addEventListener('hashchange', this.fetch)
-        this.fetch()
-      }
-
-      onUnmounted() {
-        window.removeEventListener('hashchange', this.fetch)
-      }
-
-      fetch() {
-        const id = parseInt(Url.current().hashPath().split('/')[2])
-
-        search.record(id).then(data => {
-          const record = data.results[0]
-          const item = new Item(record)
-          window.i = item
-          this.update({item})
-        })
-      }
-
-      previous(event) {
-        event.preventDefault()
-
-        const id = this.state.item.id()
-        this.props.toPreviousRecord(id)
-      }
-
-      next(event) {
-        event.preventDefault()
-
-        const id = this.state.item.id()
-        this.props.toNextRecord(id)
-      }
-
       primaryUrl() {
-        return this.state.primaryUrl || this.state.item.imageUrl()
+        return this.state.primaryUrl || this.props.item.imageUrl()
       }
 
       additionalUrls() {
-        return this.state.item.additionalUrls()
+        return this.props.item.additionalUrls()
       }
 
       setPrimary(url) {
         this.update({primaryUrl: url})
-      }
-
-      close(event) {
-        event.preventDefault()
-
-        const url = Url.current()
-        url.setHashPath('')
-        url.apply()
-      }
-
-      print(event) {
-        event.preventDefault()
-
-        const links = document.querySelectorAll("head > link[rel='stylesheet'")
-        let css = ''
-        const promises = [...links].map(e => {
-          const url = e.getAttribute('href')
-          return fetch(url).then(r => r.text()).then(text => {
-            css += `\n${text}`
-          })
-        })
-        Promise.all(promises).then(datas => {
-          console.log(css)
-          util.printElement(this.root.parentElement, {css, print: true})
-        })
-      }
-
-      download(event) {
-        event.preventDefault()
-
-        this.state.popup = !this.state.popup
-        this.update()
-      }
-
-      closeDownload(event) {
-        event.preventDefault()
-
-        this.update({popup: false})
-      }
-
-      highlight(code, language) {
-        return hljs.highlight(code, {language: language}).value
       }
 
       locale() {

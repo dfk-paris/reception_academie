@@ -15,27 +15,29 @@ import Search from './components/search.riot'
 import Results from './components/results.riot'
 import RoutedModal from './components/routed_modal.riot'
 
+import config from './lib/dotenv'
+
 Url.setForceFragment()
 
-RiotPlugins.setup(riot)
-riot.install(RiotPlugins.i18n)
-riot.install(RiotPlugins.parent)
-riot.install(RiotPlugins.setTitle)
-riot.install(BusRiotPlugin)
+i18n.fetch(`${config.STATIC_URL}/translations.json`).then(data => {
+  RiotPlugins.setup(riot)
+  riot.install(RiotPlugins.i18n)
+  riot.install(RiotPlugins.parent)
+  riot.install(RiotPlugins.setTitle)
+  riot.install(BusRiotPlugin)
 
-riot.register('dfk-active-filters', DfkActiveFilters)
-riot.register('dfk-facet', DfkFacet)
-riot.register('dfk-icon', DfkIcon)
-riot.register('dfk-input', DfkInput)
-riot.register('dfk-pagination', DfkPagination)
+  riot.register('dfk-active-filters', DfkActiveFilters)
+  riot.register('dfk-facet', DfkFacet)
+  riot.register('dfk-icon', DfkIcon)
+  riot.register('dfk-input', DfkInput)
+  riot.register('dfk-pagination', DfkPagination)
 
-riot.register('app', App)
-riot.register('dims', Dims)
-riot.register('fly-in', FlyIn)
-riot.register('search', Search)
-riot.register('results', Results)
-riot.register('routed-modal', RoutedModal)
+  riot.register('app', App)
+  riot.register('dims', Dims)
+  riot.register('fly-in', FlyIn)
+  riot.register('search', Search)
+  riot.register('results', Results)
+  riot.register('routed-modal', RoutedModal)
 
-i18n.fetch('translations.json').then(data => {
   riot.mount('[is]')
 })

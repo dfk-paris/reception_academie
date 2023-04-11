@@ -3,6 +3,8 @@
 
   <h2>{cap(t('ra'))}</h2>
 
+  <watchlist-toggle id={12} />
+
   <div class="d-flex">
     <div class="w-30">
       <search
@@ -54,8 +56,6 @@
 
         this.toPreviousRecord = this.toPreviousRecord.bind(this)
         this.toNextRecord = this.toNextRecord.bind(this)
-        // this.isFirst = this.isFirst.bind(this)
-        // this.isLast = this.isLast.bind(this)
 
         this.urlSearch = new UrlSearch(this, params)
       }
@@ -68,11 +68,6 @@
       }
 
       onSearch(p) {
-        // if (this.tags) {
-        //   const input = this.tags['live-search'][0]
-        //   input.reset()
-        // }
-
         search.query(p).then(data => {
           this.update({
             results: data

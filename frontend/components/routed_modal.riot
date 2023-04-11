@@ -3,24 +3,33 @@
     routes={routes()}
     props={props}
     class="p-print-0"
+    riot-instance={riot}
   ><fly-in /></dfk-routed-modal>
 
   <script>
+    import * as riot from 'riot'
+
     import {util} from '@wendig/lib'
 
     import DfkRoutedModal from '@dfk-paris/frontend/src/components/routed_modal.riot'
 
-    import Record from './record.riot'
+    import RecordViewer from './record_viewer.riot'
+    import Watchlist from './watchlist.riot'
 
     export default class {
       static components = {
         'dfk-routed-modal': DfkRoutedModal
       }
+
+      constructor() {
+        this.riot = riot
+      }
       
       routes() {
         return [
           {url: /^$/, component: null},
-          {url: /^\/records\/(?<id>\d+)$/, component: Record}
+          {url: /^\/records\/(?<id>\d+)$/, component: RecordViewer},
+          {url: /^\/watchlist$/, component: Watchlist}
         ]
       }
 

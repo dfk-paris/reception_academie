@@ -1,0 +1,128 @@
+<watchlist class="d-block">
+  <a class="close d-print-none" onclick={event => close(event)}>
+    <dfk-icon type="cross" />
+  </a>
+
+  <div class="container">
+    <h1>{cap(t('watchlist'))}</h1>
+
+    <div class="d-flex justify-content-between">
+      <a
+        class="mr-2 d-print-none"
+        onclick={event => print(event)}
+      ><dfk-icon type="print" /></a>
+
+      <dfk-input
+        name="expanded"
+        type="checkbox"
+        label="expand_all"}
+        update-handler={event => expand(event, value)}
+        class="d-print-none"
+      />
+    </div>
+
+    <hr class="mb-3" />
+
+    <div if={state.expanded}>
+      <record
+        each={item in state.items}
+        item={item}
+        class="d-block"
+      />
+    </div>
+
+    <div if={!state.expanded}>
+      <div each={item in state.items}>
+        <div class="title fw-bold">{item.title()}</div>
+        <div class="artists">{item.artistList()}</div>
+        <div class="year mb-3">{item.date()}</div>
+        <div class="medium">{item.medium()}</div>
+        <div class="location">{item.location()}</div>
+        <div class="inventoryNo mb-3">
+          <a if={item.inventoryNo()} target="_blank" href={inventoryUrl(item)}>
+            {inventoryLabel(item)}
+          </a>
+        </div>
+        <div class="inventories fw-bold">{item.inventories().join(', ')}</div>
+
+        <hr class="my-3" />
+      </div>
+    </div>
+  </div>
+
+  <script>
+    import {Url, util} from '@wendig/lib'
+
+    import DfkInput from '@dfk-paris/frontend/src/components/input.riot'
+
+    import search from '../lib/search.instance'
+    import watchlist from '../lib/watchlist'
+
+    import Item from '../lib/item'
+    import Record from './record.riot'
+    import config from '../lib/dotenv'
+
+    export default class {
+      static components = {Record}
+
+      onBeforeMount() {
+        this.state = {items: [], expanded: false}
+
+        this.fetch()
+      }
+
+      fetch() {
+        const id = watchlist.unpack()
+        search.query({id}).then(data => {
+          const items = data.results.map(e => new Item(e))
+          this.update({items})
+        })
+      }
+
+      expand(values) {
+        this.update({expanded: values.expanded})
+      }
+
+      inventoryLabel(item) {
+        const no = item.inventoryNo()[0]
+        if (!Array.isArray(no)) return
+
+        console.log(no)
+
+        return no[0]
+      }
+
+      inventoryUrl(item) {
+        const no = item.inventoryNo()[0]
+        if (!Array.isArray(no)) return
+
+        return no[1]
+      }
+
+      close(event) {
+        event.preventDefault()
+
+        const url = Url.current()
+        url.setHashPath('')
+        url.apply()
+      }
+
+      print(event) {
+        event.preventDefault()
+
+        const selector = `link[rel='stylesheet'][href*='${config.STATIC_URL}']`
+        const links = document.querySelectorAll(selector)
+        let css = ''
+        const promises = [...links].map(e => {
+          const url = e.getAttribute('href')
+          return fetch(url).then(r => r.text()).then(text => {
+            css += `\n${text}`
+          })
+        })
+        Promise.all(promises).then(datas => {
+          util.printElement(this.root.parentElement, {css, print: true})
+        })
+      }
+    }
+  </script>
+</watchlist>

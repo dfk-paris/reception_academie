@@ -68,6 +68,10 @@ export default class Item {
     return this.d['inventory_no']
   }
 
+  inventories() {
+    return this.d['inventories']
+  }
+
   collectionLink() {
     return this.d['collection_link']
   }

@@ -125,7 +125,17 @@ database.action('query', data => {
     // const record = r[1]
     
     if (criteria.id) {
-      if (r['id'] != criteria.id) return false
+      if (!Array.isArray(criteria.id)) {
+        criteria.id = [criteria.id]
+      }
+
+      let found = false
+      for (const id of criteria.id) {
+        // console.log(id, r['id'], r['id'] == id)
+        if (r['id'] == id) found = true
+      }
+
+      if (!found) return false
     }
 
     if (!matchesTerms(r, locale, criteria['terms'])) return false
