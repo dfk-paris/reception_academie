@@ -11,6 +11,7 @@ import DfkPagination from '@dfk-paris/frontend/src/components/pagination.riot'
 import App from './components/app.riot'
 import Dims from './components/dims.riot'
 import FlyIn from './components/fly_in.riot'
+import HelpTrigger from './components/help_trigger.riot'
 import Search from './components/search.riot'
 import Results from './components/results.riot'
 import RoutedModal from './components/routed_modal.riot'
@@ -35,6 +36,7 @@ i18n.fetch(`${config.STATIC_URL}/translations.json`).then(data => {
   riot.register('app', App)
   riot.register('dims', Dims)
   riot.register('fly-in', FlyIn)
+  riot.register('help-trigger', HelpTrigger)
   riot.register('search', Search)
   riot.register('results', Results)
   riot.register('routed-modal', RoutedModal)

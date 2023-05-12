@@ -6,7 +6,9 @@
 
   <div class="d-flex justify-content-between" if={props.item.hasImage()}>
     <div class="primary">
-      <div class="d-flex">
+      <div class="d-flex position-relative">
+        <help-trigger class="d-print-none" />
+
         <img class="d-block image" src={primaryUrl()} />
 
         <size-indicator
@@ -55,6 +57,8 @@
   </ul>
 
   <div class="dfk-expose">
+    <help-trigger class="d-print-none" />
+
     <ul class="fields">
       <li><span>{cap(t('type'))}</span><strong>{props.item.type()}</strong></li>
     </ul>
@@ -73,7 +77,13 @@
     </div>
 
     <div class="sources mt-7 d-flex">
-      <div class="label">{cap(t('sources'))}</div>
+      <div class="label">
+        {cap(t('sources'))}
+
+        <help-trigger
+          class="d-print-none position-static ml-2"
+        />
+      </div>
       <div>
         <div each={b in props.item.biblio()} class="d-flex">
           <div class="description">
@@ -83,6 +93,14 @@
           <a
             if={b.biblio['IIIF manifest']}
             href="https://static.dfkg.org/viewers_poc/mirador/#?manifest={b.biblio['IIIF manifest']}&canvas={b.canvas_id}"
+            target="_blank"
+          >
+            <dfk-icon type="book" />
+          </a>
+
+          <a
+            if={!b.biblio['IIIF manifest'] && b.biblio['link']}
+            href={b.biblio['link']}
             target="_blank"
           >
             <dfk-icon type="book" />

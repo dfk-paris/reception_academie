@@ -4,7 +4,7 @@
       <div class="h-100 d-flex align-items-center">
         <a
           class="ml-4"
-          onclick={event => toggle(event)}
+          onclick={event => selfToggle(event)}
         >
           <dfk-icon type="arrow-right" />
         </a>
@@ -69,7 +69,13 @@
     export default class {
       static components = {DfkFlyIn}
 
+      constructor() {
+        this.toggle = this.toggle.bind(this)
+      }
+
       onMounted() {
+        this.on('toggle-fly-in', this.toggle)
+
         const targets = this.root.querySelectorAll('[data-id]')
         for (const target of targets) {
           const id = target.getAttribute('data-id')
@@ -77,6 +83,10 @@
 
           target.innerHTML = text
         }
+      }
+
+      selfToggle(event) {
+        this.bus.emit('toggle-fly-in')
       }
 
       toggle(event) {

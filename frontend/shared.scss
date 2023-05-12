@@ -126,6 +126,11 @@ record {
       max-width: 400px;
     }
   }
+  
+  help-trigger {
+    position: absolute;
+    right: 0px;
+  }
 
   .secondary {
     .image {
@@ -398,5 +403,24 @@ dfk-routed-modal[component='watchlist'] {
         break-inside: initial;
       }
     }
+  }
+}
+
+
+// help trigger
+
+help-trigger {
+  a {
+    display: inline-block;
+
+    width: 25px;
+    height: 25px;
+    border-radius: 15px;
+    background-color: $tag-gray;
+
+    padding-top: 2px;
+    padding-left: 9px;
+    text-decoration: none;
+    font-weight: 700;
   }
 }

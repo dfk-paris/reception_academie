@@ -1,0 +1,15 @@
+<help-trigger>
+  <a onclick={event => toggle(event)}>?</a>
+
+  <script>
+    export default class {
+      toggle(event) {
+        event.preventDefault()
+
+        this.bus.emit('toggle-fly-in')
+        // const h = this.props.onClick
+        // if (h) h(event)
+      }
+    }
+  </script>
+</help-trigger>

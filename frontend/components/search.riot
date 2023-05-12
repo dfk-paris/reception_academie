@@ -7,13 +7,18 @@
     {cap(t('search_criteria'))}
   </div>
 
-  <dfk-input
-    placeholder={cap(t('fulltext_search'))}
-    type="text"
-    name="terms"
-    update-handler={onInputDelayed}
-    value={props.criteria.terms}
-  />
+  <div class="d-flex">
+    <dfk-input
+      placeholder={cap(t('fulltext_search'))}
+      type="text"
+      name="terms"
+      update-handler={onInputDelayed}
+      value={props.criteria.terms}
+      class="flex-grow-2 mr-3"
+    />
+
+    <help-trigger class="mt-1" />
+  </div>
 
   <div if={hasActiveFilters()} class="dfkv-active-filters">
     <div class="dfkv-bar"></div>
