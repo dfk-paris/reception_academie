@@ -103,6 +103,19 @@ const paginate = (records, criteria) => {
   }
 }
 
+const aggregateRoom = (hierarchy, record) => {
+  for (const [inventoryNo, rooms] of Object.entries(record['room'])) {
+    const inventory = {1715: 'guerin', 1781: 'argenville'}[inventoryNo]
+    const [r, e] = rooms
+
+    hierarchy[inventory] = hierarchy[inventory] || {}
+    hierarchy[inventory][r] = hierarchy[inventory][r] || {count: 0, exacts: {}}
+    hierarchy[inventory][r]['count'] += 1
+    hierarchy[inventory][r]['exacts'][e] = hierarchy[inventory][r]['exacts'][e] || 0
+    hierarchy[inventory][r]['exacts'][e] += 1
+  }
+}
+
 database.action('query', data => {
   let criteria = sanitizeCriteria(data.criteria)
   const locale = criteria['locale']
@@ -117,6 +130,8 @@ database.action('query', data => {
     'collection': {},
     'artists': {}
   }
+
+  let roomHierarchy = {}
 
   // let years = new Map()
 
@@ -161,6 +176,16 @@ database.action('query', data => {
     if (!matches(r, criteria, 'medium', locale)) return false
     if (!matches(r, criteria, 'collection', locale)) return false
 
+    if (criteria['inventory']) {
+      let c = criteria['room']
+      let value = r['room'][criteria['inventory']][0]
+      if (c && c != value) return false
+
+      c = criteria['exact']
+      value = r['room'][criteria['inventory']][1]
+      if (c && c != value) return false
+    }
+
     // if (r['years']) {
     //   const range = util.range(r['years'])
     //   for (const y of range) {
@@ -179,6 +204,8 @@ database.action('query', data => {
     aggregate(buckets, 'medium', r['medium'][locale])
     aggregate(buckets, 'collection', r['collection'][locale])
 
+    aggregateRoom(roomHierarchy, r)
+
     return true
   })
 
@@ -196,6 +223,34 @@ database.action('query', data => {
   for (const k of Object.keys(buckets)) {
     buckets[k] = elastify(buckets[k])
   }
+
+  let rooms = {}
+  for (const inventory of Object.keys(roomHierarchy)) {
+    const h = roomHierarchy[inventory]
+
+    rooms[inventory] = Object.keys(h).filter(e => e != 'undefined').map(roomName => {
+      const room = h[roomName]
+      const exactNames = Object.keys(room['exacts']).filter(e => e != 'undefined')
+
+      const item = {
+        name: roomName,
+        count: room['count'],
+        exacts: exactNames.map(e => {
+          return {
+            name: e,
+            count: room['exacts'][e]
+          }
+        })
+      }
+
+      item['exacts'] = util.sortBy(item['exacts'], e => e.count).reverse()
+
+      return item
+    })
+
+    rooms[inventory] = util.sortBy(rooms[inventory], e => e.count).reverse()
+  }
+  
 
   // results = results.sort((x, y) => {
   //   const xt = (x['name'] || '').trim()
@@ -220,6 +275,7 @@ database.action('query', data => {
 
   let response = paginate(results, criteria)
   response.buckets = buckets
+  response.rooms = rooms
 
   return response
 })

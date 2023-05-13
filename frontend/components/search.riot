@@ -26,7 +26,7 @@
 
     <dfk-active-filters
       criteria={props.criteria}
-      params={['type', 'medium', 'technique', 'inventory', 'artist', 'collection']}
+      params={['type', 'medium', 'technique', 'inventory', 'artist', 'collection', 'room', 'exact']}
       translate-keys={true}
       remove-filter={(param, value) => removeFilter(param, value)}
     />
@@ -40,6 +40,16 @@
     aggregation={props.results.buckets.inventory}
     add-filter={newFilter => addFilter(newFilter)}
     type={'inventory'}
+    class="d-block mb-6"
+  />
+
+  <room-facet
+    if={props.results}
+    name={cap(t('rooms'))}
+    criteria={props.criteria}
+    results={props.results}
+    add-filter={newFilter => addFilter(newFilter)}
+    type={'room'}
     class="d-block mb-6"
   />
 
@@ -165,7 +175,8 @@
 
       hasActiveFilters() {
         const keys = [
-          'type', 'technique', 'medium', 'collection', 'artist', 'inventory'
+          'type', 'technique', 'medium', 'collection', 'artist', 'inventory',
+          'room', 'exact'
         ]
 
         for (const k of keys) {

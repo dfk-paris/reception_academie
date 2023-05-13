@@ -19,7 +19,11 @@
 
             <li class="d-flex">
               <div class="item">
-                <dims orientation="portrait" />
+                <size-indicator
+                  wh={[80, 120]}
+                  ref-height={170.0}
+                  render-height={80}
+                />
               </div>
               <div class="description" data-id="dims"></div>
             </li>
@@ -66,8 +70,11 @@
 
   <script>
     import DfkFlyIn from '@dfk-paris/frontend/src/components/fly_in.riot'
+    import SizeIndicator from './size_indicator.riot'
+
+
     export default class {
-      static components = {DfkFlyIn}
+      static components = {DfkFlyIn, SizeIndicator}
 
       constructor() {
         this.toggle = this.toggle.bind(this)

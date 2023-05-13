@@ -22,8 +22,20 @@ export default class Item {
     return this.d['orientation']
   }
 
+  artistCount() {
+    return this.d['artists_human'][i18n.locale].length
+  }
+
   artistList() {
     return this.d['artists_human'][i18n.locale].join(', ')
+  }
+
+  artistWikidataIds() {
+    return this.d['artists_wikidata']
+  }
+
+  artistULANIds() {
+    return this.d['artists_ulan']
   }
 
   hasImage() {

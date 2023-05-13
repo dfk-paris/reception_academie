@@ -14,6 +14,7 @@ import FlyIn from './components/fly_in.riot'
 import HelpTrigger from './components/help_trigger.riot'
 import Search from './components/search.riot'
 import Results from './components/results.riot'
+import RoomFacet from './components/room_facet.riot'
 import RoutedModal from './components/routed_modal.riot'
 
 import config from './lib/dotenv'
@@ -39,6 +40,7 @@ i18n.fetch(`${config.STATIC_URL}/translations.json`).then(data => {
   riot.register('help-trigger', HelpTrigger)
   riot.register('search', Search)
   riot.register('results', Results)
+  riot.register('room-facet', RoomFacet)
   riot.register('routed-modal', RoutedModal)
 
   riot.mount('[is]')

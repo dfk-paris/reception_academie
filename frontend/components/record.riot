@@ -111,6 +111,66 @@
 
     <div class="links d-flex mt-7">
       <div class="label">{cap(t('links'))}</div>
+      <div>
+        <div>
+          <template if={props.item.artistWikidataIds().length == 1}>
+            {cap(t('artist_at_0')) + ' '}
+
+            <artist-id-links
+              type="wikidata"
+              ids={props.item.artistWikidataIds()}
+            />
+
+            <template if={props.item.artistULANIds() != 0}>
+              {' ' + t('artist_at_1') + ' '}
+
+              <artist-id-links
+                type="ulan"
+                ids={props.item.artistULANIds()}
+              />
+            </template>
+          </template>
+
+          <template if={props.item.artistWikidataIds().length > 1}>
+            {cap(t('artists_at_0')) + ' '}
+
+            <artist-id-links
+              type="wikidata"
+              ids={props.item.artistWikidataIds()}
+            />
+
+            <template if={props.item.artistULANIds().length != 0}>
+              {t('artists_at_1')}
+
+              <artist-id-links
+                type="ulan"
+                ids={props.item.artistULANIds()}
+              />
+            </template>
+          </template>
+        </div>
+
+        <!-- div>
+          {cap(t('artists_at_dfk')) + ' '}
+
+          <artist-id-links
+            type="dfk"
+            ids={props.item.artistWikidataIds()}
+          />
+        </div -->
+        <div>
+          <template if={props.item.location() == 'lost'}>
+            {cap(t('work_of_art_lost'))}
+          </template>
+
+          <template if={props.item.location() != 'lost'}>
+            {cap(t('work_of_art_at')) + ' '}
+            <a href={props.item.collectionLink()}>
+              {props.item.location()}
+            </a>
+          </template>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -155,6 +215,7 @@
   <script>
     import {i18n, util} from '@wendig/lib'
 
+    import ArtistIdLinks from './artist_id_links.riot'
     import DfkIcon from '@dfk-paris/frontend/src/components/icon.riot'
     import DfkPopup from '@dfk-paris/frontend/src/components/popup.riot'
     import DfkRaw from '@dfk-paris/frontend/src/components/raw.riot'
@@ -162,6 +223,7 @@
 
     export default class {
       static components = {
+        ArtistIdLinks,
         DfkIcon,
         DfkPopup,
         DfkRaw,

@@ -1,0 +1,45 @@
+<artist-id-links>
+  <template if={props.ids.length == 1}>
+    <a
+      href={url(props.ids[0])}
+      target="_blank"
+      class="id"
+    >{cap(t(props.type))}</a>
+  </template>
+
+  <template if={props.ids.length > 1}>
+    {cap(t(props.type))}
+    (
+      <a
+        each={id in props.ids}
+        href={url(id)}
+        target="_blank"
+        class="id"
+      >{id}</a><!--
+ -->)
+  </template>
+
+  <script>
+    import {i18n, util} from '@wendig/lib'
+
+    export default class {
+      constructor() {
+        this.t = i18n.translate
+        this.cap = util.capitalize
+      }
+
+      onBeforeMount() {
+        console.log(this.props)
+      }
+
+      url(id) {
+        const mapping = {
+          'wikidata': `https://www.wikidata.org/wiki/${id}`,
+          'ulan': `http://vocab.getty.edu/page/ulan/${id}`
+        }
+
+        return mapping[this.props.type]
+      }
+    }
+  </script>
+</artist-id-links>

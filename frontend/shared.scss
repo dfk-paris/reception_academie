@@ -192,6 +192,23 @@ record {
     }
   }
 
+  .links {
+    .label {
+      width: 150px;
+    }
+ 
+    .id:after {
+      display: inline-block;
+      content: ',';
+      margin-right: 5px;
+    }
+
+    .id:last-child:after {
+      content: '';
+      margin-right: 0;
+    }
+  }
+
   // .inventory-no {
   //   strong::before {
   //     content: ', '

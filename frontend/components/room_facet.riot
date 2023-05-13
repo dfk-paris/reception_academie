@@ -1,0 +1,85 @@
+<room-facet>
+  <template if={inventory()}>
+    <div class="header mb-4 dfk-sans-serif">{props.name}</div>
+
+    <div class="buttons d-flex flex-column justify-content-around">
+      <template each={room in rooms()}>
+        <a
+          onclick={event => toggle(room['name'], false, event)}
+          class="d-flex rounded bg-gray mr-3 mb-2 p-2 text-decoration-none"
+        >
+          <div>+</div>
+          <div class="ml-1">
+            <span class="label">{room['name']}</span>&nbsp;
+            <span class="count">({room['count']})</span>
+          </div>
+        </a>
+
+        <template each={exact in room['exacts']}>
+          <a
+            onclick={event => toggle(exact['name'], true, event)}
+            class="d-flex rounded bg-gray ml-3 mb-2 p-2 text-decoration-none"
+          >
+            <div>+</div>
+            <div class="ml-1">
+              <span class="label">{exact['name']}</span>&nbsp;
+              <span class="count">({exact['count']})</span>
+            </div>
+          </a>
+        </template>
+      </template>
+    </div>
+  </template>
+
+  <script>
+    export default class {
+      toggle(value, exact, event) {
+        event.preventDefault()
+
+        const key = (exact ? 'exact' : 'room')
+        this.props.addFilter({[key]: value})
+      }
+
+      inventory() {
+        let c = this.props.criteria['inventory']
+        if (!c) return null
+
+        c = c.split('|')
+        if (c.length > 1) return null
+
+        c = c[0]
+
+        const mapping = {
+          1715: 'guerin',
+          1781: 'argenville'
+        }
+
+        return mapping[c]
+      }
+
+      rooms() {
+        if (!this.props.results.rooms) return []
+
+        console.log(this.props.results.rooms[this.inventory()])
+
+        return this.props.results.rooms[this.inventory()]
+      }
+
+      // countFor(value, exact = false) {
+      //   const key = `room_${exact ? 'exact_' : ''}${this.inventory()}`
+
+      //   let buckets = this.props.results.buckets[key]
+      //   if (!buckets) return 0
+
+      //   buckets = buckets.buckets
+      //   if (!buckets) return 0
+
+      //   for (const bucket of buckets) {
+      //     if (bucket.key == value) return bucket.doc_count
+      //   }
+
+      //   return 0
+      // }
+    }
+  </script>
+</room-facet>
