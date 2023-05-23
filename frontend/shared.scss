@@ -45,6 +45,13 @@ room-facet {
       font-weight: bold;
     }
   }
+
+  dfk-icon[type='triangle-up'],
+  dfk-icon[type='triangle-down'] {
+    &:hover polyline {
+      fill: #555555;
+    }
+  }
 }
 
 
