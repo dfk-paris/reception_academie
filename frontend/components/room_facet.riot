@@ -3,41 +3,56 @@
     <div class="header mb-4 dfk-sans-serif">{props.name}</div>
 
     <div class="buttons d-flex flex-column justify-content-around">
-      <template each={room in rooms()}>
+      <div each={room in rooms()}>
         <a
-          onclick={event => toggle(room['name'], false, event)}
-          class="d-flex rounded bg-gray mr-3 mb-2 p-2 text-decoration-none"
+          onclick={event => addFilter(room['name'], null, event)}
+          class="d-flex rounded bg-gray mr-3 mb-2 p-2 dfk-sans-serif"
         >
           <div>+</div>
           <div class="ml-1">
-            <span class="label">{room['name']}</span>&nbsp;
-            <span class="count">({room['count']})</span>
+            <span class="label">{room['name']}</span>&nbsp;<!--
+         --><span class="count">({room['count']})</span>
           </div>
+
+          <dfk-icon
+            if={room['exacts'].length > 0}
+            type="triangle-{room['expand'] ? 'down' : 'up'}"
+            class="ml-auto mr-1"
+            onclick={event => toggle(room, event)}
+          />
         </a>
 
-        <template each={exact in room['exacts']}>
+        <template if={room['expand']}>
           <a
-            onclick={event => toggle(exact['name'], true, event)}
-            class="d-flex rounded bg-gray ml-3 mb-2 p-2 text-decoration-none"
+            each={exact in room['exacts']}
+            onclick={event => addFilter(room['name'], exact['name'], event)}
+            class="d-flex rounded bg-gray ml-3 mb-2 p-2 dfk-sans-serif"
           >
             <div>+</div>
             <div class="ml-1">
-              <span class="label">{exact['name']}</span>&nbsp;
-              <span class="count">({exact['count']})</span>
+              <span class="label">{exact['name']}</span>&nbsp;<!--
+           --><span class="count">({exact['count']})</span>
             </div>
           </a>
         </template>
-      </template>
+      </div>
     </div>
   </template>
 
   <script>
     export default class {
-      toggle(value, exact, event) {
+      toggle(room, event) {
+        event.preventDefault()
+        event.stopPropagation()
+
+        room['expand'] = !room['expand']
+        this.update()
+      }
+
+      addFilter(room, exact, event) {
         event.preventDefault()
 
-        const key = (exact ? 'exact' : 'room')
-        this.props.addFilter({[key]: value})
+        this.props.addFilter({room, exact})
       }
 
       inventory() {
@@ -60,7 +75,7 @@
       rooms() {
         if (!this.props.results.rooms) return []
 
-        console.log(this.props.results.rooms[this.inventory()])
+        // console.log(this.props.results.rooms[this.inventory()])
 
         return this.props.results.rooms[this.inventory()]
       }

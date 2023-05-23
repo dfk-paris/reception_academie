@@ -26,7 +26,8 @@ dfk-routed-modal {
 //   @extend [is='icon'];
 // }
 
-dfk-facet {
+dfk-facet,
+room-facet {
   a {
     text-decoration: none !important;
   }
@@ -38,7 +39,6 @@ dfk-facet {
   &[type='inventory'] {
     .rounded {
       background-color: #A4A3A3;
-
     }
     
     .label {
@@ -206,6 +206,10 @@ record {
     .id:last-child:after {
       content: '';
       margin-right: 0;
+    }
+
+    a {
+      text-decoration: underline;
     }
   }
 
