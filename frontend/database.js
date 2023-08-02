@@ -43,7 +43,11 @@ const matches = (record, criteria, key, locale) => {
   if (locale) v = v[locale]
   if (!v) return false
 
-  return v == criteria[key]
+  for (const c of criteria[key].split('|')) {
+    if (c == v) return true
+  }
+
+  return false
 }
 
 const matchesAnyOf = (record, criteria, criteriaKey, recordKey = null) => {
@@ -54,10 +58,10 @@ const matchesAnyOf = (record, criteria, criteriaKey, recordKey = null) => {
   const list = criteria[criteriaKey].split('|')
 
   for (const c of list) {
-    if (record[recordKey].indexOf(c) == -1) return false
+    if (record[recordKey].indexOf(c) != -1) return true
   }
 
-  return true
+  return false
 }
 
 const matchesTerms = (record, locale, terms) => {
@@ -133,11 +137,14 @@ database.action('query', data => {
 
   let roomHierarchy = {}
 
-  // let years = new Map()
-
   let results = storage.filter(r => {
-    // const id = r[0]
-    // const record = r[1]
+    aggregate(buckets, 'artists', r['artists'])
+    aggregate(buckets, 'inventory', r['inventories'])
+    aggregate(buckets, 'type', r['type'])
+    aggregate(buckets, 'technique', r['technique'][locale])
+    aggregate(buckets, 'medium', r['medium'][locale])
+    aggregate(buckets, 'collection', r['collection'][locale])
+    aggregateRoom(roomHierarchy, r)
     
     if (criteria.id) {
       if (!Array.isArray(criteria.id)) {
@@ -146,27 +153,14 @@ database.action('query', data => {
 
       let found = false
       for (const id of criteria.id) {
-        // console.log(id, r['id'], r['id'] == id)
         if (r['id'] == id) found = true
       }
 
       if (!found) return false
     }
-
+  
     if (!matchesTerms(r, locale, criteria['terms'])) return false
 
-    // if (!matches(r, criteria, 'db')) return false
-    // if (!matches(r, criteria, 'kind')) return false
-
-    // if (criteria.name) {
-    //   const value = util.fold(`${r['n']} ${r['dn']}`)
-    //   const terms = criteria.name.split(/\s/)
-    //   const m = terms.every(t => {
-    //     const regex = new RegExp(util.regEscape(`${util.fold(t)}`), 'i')
-    //     return value.match(regex)
-    //   })
-    //   if (!m) {return false}
-    // }
 
     if (!matchesAnyOf(r, criteria, 'artist', 'artists')) return false
     if (!matchesAnyOf(r, criteria, 'inventory', 'inventories')) return false
@@ -185,26 +179,6 @@ database.action('query', data => {
       value = r['room'][criteria['inventory']][1]
       if (c && c != value) return false
     }
-
-    // if (r['years']) {
-    //   const range = util.range(r['years'])
-    //   for (const y of range) {
-    //     const v = years.get(y) || 0
-    //     years.set(y, v + 1)
-    //   }
-    // }
-
-    // let args = [criteria['from'], criteria['to'], criteria['include_no_years']]
-    // if (!matchesYear(r, ...args)) return false
-
-    aggregate(buckets, 'artists', r['artists'])
-    aggregate(buckets, 'inventory', r['inventories'])
-    aggregate(buckets, 'type', r['type'])
-    aggregate(buckets, 'technique', r['technique'][locale])
-    aggregate(buckets, 'medium', r['medium'][locale])
-    aggregate(buckets, 'collection', r['collection'][locale])
-
-    aggregateRoom(roomHierarchy, r)
 
     return true
   })
@@ -251,14 +225,6 @@ database.action('query', data => {
     rooms[inventory] = util.sortBy(rooms[inventory], e => e.count).reverse()
   }
   
-
-  // results = results.sort((x, y) => {
-  //   const xt = (x['name'] || '').trim()
-  //   const yt = (y['name'] || '').trim()
-  //   if (xt == yt) return 0
-  //   return xt < yt ? -1 : 1 
-  // })
-
   const paginate = (records, criteria) => {
     const {page, per_page} = criteria
     const total = records.length

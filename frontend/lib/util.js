@@ -39,7 +39,14 @@ const indexFor = (response, id) => {
   return -1
 }
 
+const baseUrl = () => {
+  const url = Url.current()
+  const r = url.resource().split('#')[0]
+  return `${url.origin()}${r}`
+}
+
 export {
+  baseUrl,
   indexFor,
   open,
   params

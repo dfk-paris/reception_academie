@@ -1,6 +1,7 @@
 import * as riot from 'riot'
 
 import {RiotPlugins, BusRiotPlugin, i18n, Url} from '@wendig/lib'
+window.Url = Url
 
 import DfkActiveFilters from '@dfk-paris/frontend/src/components/active_filters.riot'
 import DfkFacet from '@dfk-paris/frontend/src/components/facet.riot'

@@ -1,5 +1,6 @@
 import {i18n} from '@wendig/lib'
 import config from '../lib/dotenv'
+import {baseUrl} from '../lib/util'
 
 export default class Item {
   constructor(data) {
@@ -8,6 +9,10 @@ export default class Item {
 
   id() {
     return this.d['id']
+  }
+
+  url() {
+    return `${baseUrl()}#/records/${this.id()}`
   }
 
   title() {

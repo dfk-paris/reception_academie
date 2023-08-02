@@ -70,7 +70,7 @@
       >
         <div class="label">{cap(t('location'))}</div>
         <div class="fw-bold mr-5">{room[0]}</div>
-        <div class="fw-bold fst-italic">
+        <div class="fw-bold">
           <div each={e in room[1]}>{e}</div>
         </div>
       </div>
@@ -176,44 +176,47 @@
 
   <div class="dfk-expose mt-5">
     <div class="mb-5">
-      <strong>{cap(t('ref_dataset'))}</strong>
+      <strong>{cap(t('ref_entry'))}</strong>
       <div>
-        Markus A. Castor, Sofya Dmitrieva (Eds.), »Projecttitle [Research Data]«,
-        heiDATA, 2023, https://doi.org/10.11588/DATA/Z#####.
+        Castor, Markus A., Anne Klammt, and Sofya Dmitrieva (eds.), “Académie
+        Royale Art Collection Database. Artwork ID {props.item.id()} ,” DFK Paris. August 31,
+        2023. URL:&nbsp;<a href="{props.item.url()}">{props.item.url()}</a>
       </div>
     </div>
 
     <div class="mb-5">
-      <strong>{cap(t('ref_entry'))}</strong>
+      <strong>{cap(t('ref_dataset'))}</strong>
       <div>
-        Markus A. Castor, Sofya Dmitrieva (Eds.), »ID artwork. Database -
-        Projecttitle [Research Data]«, Paris 2023. URL: https://dfk-paris some
-        adress#/resolve/sources/19532/de/de..
+        Castor, Markus A., Anne Klammt, and Sofya Dmitrieva (eds.), “Académie
+        Royale Art Collection Database,” DFK Paris. August 31, 2023. URL:
+        <a href={baseUrl()}>{baseUrl()}</a>
       </div>
     </div>
 
     <div class="mb-5">
       <strong>{cap(t('contact'))}</strong>
       <div>
-        This entry represents the results of an ongoing research. We are happy
-        to add and optimize it according to your advice. reach out via:
-        PROJECTTITLE@dfk-paris.org
+        This entry is the result of ongoing research. We would be happy to
+        improve or correct it. If you are aware of additional information or
+        inconsistences, please contact us at
+        collection-academieroyale@dfk-paris.org.
       </div>
     </div>
 
     <div>
       <strong>{cap(t('use'))}</strong>
       <div>
-        The use of the work data and the illustrations is indicated under the
-        link given for each picture. The information on localization and the
-        links to the sources are the result of the research work of the DFK
-        Paris and may be used freely.
+        DFK Paris is not the copyright holder of any of the images used. To
+        reuse images, please refer to the guidelines on the original collection
+        website. Other information may be used freely.
       </div>
     </div>
   </div>
 
   <script>
     import {i18n, util} from '@wendig/lib'
+
+    import {baseUrl} from '../lib/util'
 
     import ArtistIdLinks from './artist_id_links.riot'
     import DfkIcon from '@dfk-paris/frontend/src/components/icon.riot'
@@ -233,6 +236,7 @@
       constructor() {
         this.t = i18n.translate
         this.cap = util.capitalize
+        this.baseUrl = baseUrl
       }
 
       primaryUrl() {

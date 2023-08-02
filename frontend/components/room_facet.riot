@@ -11,7 +11,7 @@
           <div>+</div>
           <div class="ml-1">
             <span class="label">{room['name']}</span>&nbsp;<!--
-         --><span class="count">({room['count']})</span>
+         --><span if={!props.hideCounts} class="count">({room['count']})</span>
           </div>
 
           <dfk-icon
@@ -31,7 +31,7 @@
             <div>+</div>
             <div class="ml-1">
               <span class="label">{exact['name']}</span>&nbsp;<!--
-           --><span class="count">({exact['count']})</span>
+           --><span class="count" if={!props.hideCounts}>({exact['count']})</span>
             </div>
           </a>
         </template>
