@@ -1,5 +1,5 @@
 <room-facet>
-  <template if={inventory()}>
+  <template if={inventory() && anyRooms()}>
     <div class="header mb-4 dfk-sans-serif">{props.name}</div>
 
     <div class="buttons d-flex flex-column justify-content-around">
@@ -75,26 +75,15 @@
       rooms() {
         if (!this.props.results.rooms) return []
 
-        // console.log(this.props.results.rooms[this.inventory()])
-
         return this.props.results.rooms[this.inventory()]
       }
 
-      // countFor(value, exact = false) {
-      //   const key = `room_${exact ? 'exact_' : ''}${this.inventory()}`
-
-      //   let buckets = this.props.results.buckets[key]
-      //   if (!buckets) return 0
-
-      //   buckets = buckets.buckets
-      //   if (!buckets) return 0
-
-      //   for (const bucket of buckets) {
-      //     if (bucket.key == value) return bucket.doc_count
-      //   }
-
-      //   return 0
-      // }
+      anyRooms() {
+        const rooms = this.props.results.rooms
+        const count = Object.keys(rooms).length
+        
+        return count > 0
+      }
     }
   </script>
 </room-facet>

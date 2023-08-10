@@ -37,6 +37,8 @@ const matches = (record, criteria, key, locale) => {
   if (!criteria) return true
   if (!criteria[key]) return true
 
+  console.log(record, key, criteria)
+
   let v = record[key]
   if (!v) return false
 
@@ -50,7 +52,13 @@ const matches = (record, criteria, key, locale) => {
   return false
 }
 
-const matchesAnyOf = (record, criteria, criteriaKey, recordKey = null) => {
+const matchesInventory = (record, criteria) => {
+  if (!criteria) return true
+
+  return record['inventories'].includes(criteria)
+}
+
+const matchesAnyOf = (record, criteria, criteriaKey, recordKey = null, locale = null) => {
   if (!criteria) return true
   if (!criteria[criteriaKey]) return true
 
@@ -58,7 +66,11 @@ const matchesAnyOf = (record, criteria, criteriaKey, recordKey = null) => {
   const list = criteria[criteriaKey].split('|')
 
   for (const c of list) {
-    if (record[recordKey].indexOf(c) != -1) return true
+    let value = record[recordKey]
+    if (locale) value = value[locale]
+    if (!value) return false
+
+    if (value.includes(c)) return true
   }
 
   return false
@@ -82,6 +94,22 @@ const matchesTerms = (record, locale, terms) => {
   }
 
   return true
+}
+
+const matchesRoom = (record, criteria) => {
+  if (!criteria['inventory']) return true
+  if (!criteria['room']) return true
+
+  const is = criteria['inventory'].split('|')
+  for (const i of is) {
+    const c = criteria['room']
+    const e = criteria['exact']
+    const [room, exact] = record['room'][i]
+
+    if ((c == room) && (!e || e == exact)) return true
+  }
+
+  return false
 }
 
 const sanitizeCriteria = (input) => {
@@ -120,6 +148,18 @@ const aggregateRoom = (hierarchy, record) => {
   }
 }
 
+const dropBucket = (buckets, key, value) => {
+  if (!value) return
+  if (!buckets[key]) return
+
+  const vs = value.split('|')
+  for (const v of vs) {
+    if (!buckets[key][v]) return
+
+    delete buckets[key][v]
+  }
+}
+
 database.action('query', data => {
   let criteria = sanitizeCriteria(data.criteria)
   const locale = criteria['locale']
@@ -139,12 +179,10 @@ database.action('query', data => {
 
   let results = storage.filter(r => {
     aggregate(buckets, 'artists', r['artists'])
-    aggregate(buckets, 'inventory', r['inventories'])
     aggregate(buckets, 'type', r['type'])
     aggregate(buckets, 'technique', r['technique'][locale])
     aggregate(buckets, 'medium', r['medium'][locale])
     aggregate(buckets, 'collection', r['collection'][locale])
-    aggregateRoom(roomHierarchy, r)
     
     if (criteria.id) {
       if (!Array.isArray(criteria.id)) {
@@ -160,28 +198,34 @@ database.action('query', data => {
     }
   
     if (!matchesTerms(r, locale, criteria['terms'])) return false
+    if (!matchesInventory(r, criteria['inventory'])) return false
 
-
+    if (!matchesAnyOf(r, criteria, 'type')) return false
     if (!matchesAnyOf(r, criteria, 'artist', 'artists')) return false
-    if (!matchesAnyOf(r, criteria, 'inventory', 'inventories')) return false
+    if (!matchesAnyOf(r, criteria, 'technique', null, locale)) return false
+    if (!matchesAnyOf(r, criteria, 'medium', null, locale)) return false
+    if (!matchesAnyOf(r, criteria, 'collection', null, locale)) return false
 
-    if (!matches(r, criteria, 'type')) return false
-    if (!matches(r, criteria, 'technique', locale)) return false
-    if (!matches(r, criteria, 'medium', locale)) return false
-    if (!matches(r, criteria, 'collection', locale)) return false
+    if (!matchesRoom(r, criteria)) return false
 
-    if (criteria['inventory']) {
-      let c = criteria['room']
-      let value = r['room'][criteria['inventory']][0]
-      if (c && c != value) return false
-
-      c = criteria['exact']
-      value = r['room'][criteria['inventory']][1]
-      if (c && c != value) return false
-    }
+    aggregate(buckets, 'inventory', r['inventories'], criteria['inventory'])
+    aggregateRoom(roomHierarchy, r)
 
     return true
   })
+
+  // drop buckets reflecting active criteria
+  dropBucket(buckets, 'inventory', criteria['inventory'])
+  dropBucket(buckets, 'artists', criteria['artist'])
+  dropBucket(buckets, 'collection', criteria['collection'])
+  dropBucket(buckets, 'medium', criteria['medium'])
+  dropBucket(buckets, 'type', criteria['type'])
+  if (criteria['inventory']) {
+    buckets['inventory'] = {}
+  }
+  if (criteria['room']) {
+    roomHierarchy = {}
+  }
 
   // sorting buckets
   for (const k of Object.keys(buckets)) {

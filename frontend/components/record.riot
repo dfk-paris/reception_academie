@@ -59,8 +59,11 @@
   <div class="dfk-expose">
     <help-trigger class="d-print-none" />
 
-    <ul class="fields">
-      <li><span>{cap(t('type'))}</span><strong>{props.item.type()}</strong></li>
+    <ul class="fields type">
+      <li class="d-flex">
+        <div class="label">{cap(t('type'))}</div>
+        <strong>{props.item.type()}</strong>
+      </li>
     </ul>
 
     <div class="location mt-4">
@@ -86,7 +89,7 @@
       </div>
       <div>
         <div each={b in props.item.biblio()} class="d-flex">
-          <div class="description">
+          <div class="description fw-bold">
             {b.biblio.short_title}, {b.pages}
           </div>
 
@@ -112,7 +115,7 @@
     <div class="links d-flex mt-7">
       <div class="label">{cap(t('links'))}</div>
       <div>
-        <div>
+        <div class="fw-bold">
           <template if={props.item.artistWikidataIds().length == 1}>
             {cap(t('artist_at_0')) + ' '}
 
@@ -158,7 +161,7 @@
             ids={props.item.artistWikidataIds()}
           />
         </div -->
-        <div>
+        <div class="fw-bold">
           <template if={props.item.location() == 'lost'}>
             {cap(t('work_of_art_lost'))}
           </template>
