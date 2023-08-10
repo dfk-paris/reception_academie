@@ -2,6 +2,8 @@
 
 @import '@dfk-paris/frontend/src/index';
 
+$text-color: #333333;
+
 dfk-facet {
   @extend facet;
 }
@@ -175,6 +177,12 @@ record {
   .dfk-expose {
     margin-left: -30px;
     margin-right: -30px;
+
+    color: $text-color;
+
+    a {
+      color: $text-color;
+    }
   }
 
   .type {
@@ -193,8 +201,11 @@ record {
     .label {
       width: 150px;
     }
+
     .description {
       width: 300px;
+      color: $text-color;
+      font-size: 1em;
     }
 
     [is='icon'] {
