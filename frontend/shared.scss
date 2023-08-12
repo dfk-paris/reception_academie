@@ -133,12 +133,6 @@ record {
   }
 
   .primary {
-    .image {
-      // width: 300px;
-      // max-height: 450px;
-      // max-width: 400px;
-    }
-
     .copy, .study {
       margin-top: -30px;
     }
@@ -202,6 +196,20 @@ record {
   .location {
     .label {
       width: 150px;
+    }
+  }
+
+  .notes {
+    .label {
+      width: 150px;
+    }
+    
+    p {
+      width: 300px;
+
+      &:first-child {
+        margin-top: 0;
+      }
     }
   }
 

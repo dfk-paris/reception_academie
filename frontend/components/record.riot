@@ -118,7 +118,16 @@
       </div>
     </div>
 
-    <div class="sources mt-7 d-flex">
+    <div if={props.item.notes().length > 0} class="notes mt-4">
+      <div class="d-flex">
+        <div class="label">{cap(t('notes'))}</div>
+        <div class="fw-bold">
+          <p each={note in props.item.notes()}>{note}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="sources mt-4 d-flex">
       <div class="label">
         {cap(t('sources'))}
 
@@ -151,7 +160,7 @@
       </div>
     </div>
 
-    <div class="links d-flex mt-7">
+    <div class="links d-flex mt-4">
       <div class="label">{cap(t('links'))}</div>
       <div>
         <div class="fw-bold">

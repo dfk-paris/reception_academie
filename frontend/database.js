@@ -81,6 +81,8 @@ const matchesTerms = (record, locale, terms) => {
 
   const title = util.fold(record['title'][locale])
   const artist = util.fold(record['artists'].join(' '))
+  let notes = record['notes'][locale] || []
+  notes = util.fold(notes.join(' '))
   const id = `${record['id']}`
 
   for (const token of terms.split(/\s+/)) {
@@ -88,6 +90,7 @@ const matchesTerms = (record, locale, terms) => {
     const m = (
       title.includes(c) ||
       artist.includes(c) ||
+      notes.includes(c) ||
       c == id
     )
     if (!m) return false

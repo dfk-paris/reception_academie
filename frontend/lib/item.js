@@ -133,6 +133,10 @@ export default class Item {
     return this.d['plate_link']
   }
 
+  notes() {
+    return this.d['notes'][i18n.locale]
+  }
+
   dimClass() {
     const area = this.d['area']
 
