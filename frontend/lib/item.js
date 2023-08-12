@@ -105,6 +105,34 @@ export default class Item {
     return this.d['room']
   }
 
+  hasStudy() {
+    return !!this.d['study']
+  }
+
+  studyImage() {
+    return `${config.STATIC_URL}${this.d['study']['image']}`
+  }
+
+  studyCaption() {
+    return this.d['study'][i18n.locale]
+  }
+
+  hasCopy() {
+    return !!this.d['copy']
+  }
+
+  copyImage() {
+    return `${config.STATIC_URL}${this.d['copy']['image']}`
+  }
+
+  copyCaption() {
+    return this.d['copy'][i18n.locale]
+  }
+
+  plateLink() {
+    return this.d['plate_link']
+  }
+
   dimClass() {
     const area = this.d['area']
 

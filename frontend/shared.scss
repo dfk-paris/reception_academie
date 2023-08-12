@@ -28,6 +28,10 @@ dfk-routed-modal {
 //   @extend [is='icon'];
 // }
 
+.bg-gray {
+  background-color: $tag-gray;
+}
+
 dfk-facet,
 room-facet {
   a {
@@ -131,16 +135,15 @@ record {
   .primary {
     .image {
       // width: 300px;
-      max-height: 450px;
-      max-width: 400px;
+      // max-height: 450px;
+      // max-width: 400px;
+    }
+
+    .copy, .study {
+      margin-top: -30px;
     }
   }
   
-  help-trigger {
-    position: absolute;
-    right: 0px;
-  }
-
   .secondary {
     .image {
       width: 100px;
@@ -182,6 +185,11 @@ record {
 
     a {
       color: $text-color;
+    }
+
+    help-trigger {
+      position: absolute;
+      right: 0px;
     }
   }
 
