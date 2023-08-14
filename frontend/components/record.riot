@@ -15,11 +15,21 @@
           class="d-block w-100"
           src={primaryUrl()}
         />
+
         <div
           if={!props.item.hasImage()}
-          class="bg-gray w-100"
-          style="height: 460px;"
-        ></div>
+          class="w-100"
+        >
+          <blockquote each={quote in props.item.descriptionUnident()}>
+            <dfk-icon type="quotes" />
+
+            {quote}
+          </blockquote>
+        </div>
+
+        <blockquote>
+          
+        </blockquote>
       </div>
       <div class="col-4">
         <div class="d-inline-block h-100 ml-7">
@@ -36,20 +46,20 @@
         </div>
       </div>
       <div class="col-4">
-        <div class="study" if={props.item.hasStudy()}>
+        <div class="study text-end" if={props.item.hasStudy()}>
           <div class="fw-bold mb-2">{cap(t('study'))}</div>
 
-          <img class="d-block w-100" src="{props.item.studyImage()}" />
+          <img class="w-50 mb-2" src="{props.item.studyImage()}" />
           
           <small>
-            <raw html={props.item.studyCaption()} />
+            <raw class="d-block text-end" html={props.item.studyCaption()} />
           </small>
         </div>
 
         <div class="copy" if={props.item.hasCopy()}>
           <div class="fw-bold mb-2">{cap(t('copy'))}</div>
 
-          <img class="d-block w-100" src="{props.item.copyImage()}" />
+          <img class="d-block w-50 mb-2" src="{props.item.copyImage()}" />
           
           <small>
             <raw html={props.item.copyCaption()} />
@@ -105,15 +115,18 @@
       </li>
     </ul>
 
-    <div class="location mt-4">
-      <div
-        each={room in Object.entries(props.item.room())}
-        class="d-flex room"
-      >
-        <div class="label">{cap(t('location'))}</div>
-        <div class="fw-bold mr-5">{room[0]}</div>
-        <div class="fw-bold">
-          <div each={e in room[1]}>{e}</div>
+    <div class="location mt-4 d-flex">
+      <div class="label">{cap(t('location'))}</div>
+
+      <div>
+        <div
+          each={room in Object.entries(props.item.room())}
+          class="d-flex room"
+        >
+          <div class="fw-bold mr-5">{room[0]}</div>
+          <div class="fw-bold">
+            <div each={e in room[1]}>{e}</div>
+          </div>
         </div>
       </div>
     </div>
@@ -136,7 +149,7 @@
         />
       </div>
       <div>
-        <div each={b in props.item.biblio()} class="d-flex mb-3">
+        <div each={b in props.item.biblio()} class="source d-flex">
           <div class="description fw-bold">
             {b.biblio.short_title}, {b.pages}
           </div>
@@ -160,11 +173,11 @@
       </div>
     </div>
 
-    <div class="links d-flex mt-4">
+    <div if={hasAnyLinks()} class="links d-flex mt-4">
       <div class="label">{cap(t('links'))}</div>
       <div>
         <div class="fw-bold">
-          <template if={props.item.artistWikidataIds().length == 1}>
+          <template if={hasOneArtist()}>
             {cap(t('artist_at_0')) + ' '}
 
             <artist-id-links
@@ -182,7 +195,7 @@
             </template>
           </template>
 
-          <template if={props.item.artistWikidataIds().length > 1}>
+          <template if={hasManyArtists()}>
             {cap(t('artists_at_0')) + ' '}
 
             <artist-id-links
@@ -200,10 +213,10 @@
             </template>
           </template>
 
-          <div if={props.item.plateLink()}>
+          <div if={hasPlateLink()}>
             {cap(t('plate_at')) + ' '}
 
-            <a href={props.item.plateLink()}>
+            <a href={props.item.plateLink()} target="_blank">
               Chalcographie du Louvre, Ateliers d'art des musées nationaux,
               moulage et chalcographie, Saint-Denis
             </a>
@@ -219,11 +232,7 @@
           />
         </div -->
         <div class="fw-bold">
-          <template if={props.item.location() == 'lost'}>
-            {cap(t('work_of_art_lost'))}
-          </template>
-
-          <template if={props.item.location() != 'lost'}>
+          <template if={hasLocation()}>
             {cap(t('work_of_art_at')) + ' '}
             <a href={props.item.collectionLink()}>
               {props.item.location()}
@@ -311,6 +320,30 @@
 
       setPrimary(url) {
         this.update({primaryUrl: url})
+      }
+
+      hasAnyArtists() {
+        return this.props.item.artistWikidataIds().length > 0
+      }
+
+      hasOneArtist() {
+        return this.props.item.artistWikidataIds().length == 1
+      }
+
+      hasManyArtists() {
+        return this.props.item.artistWikidataIds().length > 1
+      }
+
+      hasPlateLink() {
+        return !!this.props.item.plateLink()
+      }
+
+      hasLocation() {
+        return !['lost', 'unidentified'].includes(this.props.item.location())
+      }
+
+      hasAnyLinks() {
+        return this.hasAnyArtists() || this.hasPlateLink() || this.hasLocation()
       }
 
       locale() {

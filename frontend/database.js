@@ -83,6 +83,8 @@ const matchesTerms = (record, locale, terms) => {
   const artist = util.fold(record['artists'].join(' '))
   let notes = record['notes'][locale] || []
   notes = util.fold(notes.join(' '))
+  let descriptionUnident = record['description_unident'] || []
+  descriptionUnident = util.fold(descriptionUnident.join(' '))
   const id = `${record['id']}`
 
   for (const token of terms.split(/\s+/)) {
@@ -91,6 +93,7 @@ const matchesTerms = (record, locale, terms) => {
       title.includes(c) ||
       artist.includes(c) ||
       notes.includes(c) ||
+      descriptionUnident.includes(c) ||
       c == id
     )
     if (!m) return false
@@ -101,15 +104,18 @@ const matchesTerms = (record, locale, terms) => {
 
 const matchesRoom = (record, criteria) => {
   if (!criteria['inventory']) return true
-  if (!criteria['room']) return true
+  if (!criteria['room'] && !criteria['exact']) return true
 
-  const is = criteria['inventory'].split('|')
-  for (const i of is) {
-    const c = criteria['room']
-    const e = criteria['exact']
-    const [room, exact] = record['room'][i]
+  const forInventory = record['room'][criteria['inventory']]
 
-    if ((c == room) && (!e || e == exact)) return true
+  let cs = criteria['room']
+  if (cs) {
+    if (cs.split('|').includes(forInventory[0])) return true
+  }
+
+  cs = criteria['exact']
+  if (cs) {
+    if (cs.split('|').includes(forInventory[1])) return true
   }
 
   return false
@@ -186,7 +192,7 @@ database.action('query', data => {
     aggregate(buckets, 'technique', r['technique'][locale])
     aggregate(buckets, 'medium', r['medium'][locale])
     aggregate(buckets, 'collection', r['collection'][locale])
-    
+
     if (criteria.id) {
       if (!Array.isArray(criteria.id)) {
         criteria.id = [criteria.id]
@@ -203,16 +209,17 @@ database.action('query', data => {
     if (!matchesTerms(r, locale, criteria['terms'])) return false
     if (!matchesInventory(r, criteria['inventory'])) return false
 
+
     if (!matchesAnyOf(r, criteria, 'type')) return false
     if (!matchesAnyOf(r, criteria, 'artist', 'artists')) return false
     if (!matchesAnyOf(r, criteria, 'technique', null, locale)) return false
     if (!matchesAnyOf(r, criteria, 'medium', null, locale)) return false
     if (!matchesAnyOf(r, criteria, 'collection', null, locale)) return false
 
+    aggregateRoom(roomHierarchy, r)
     if (!matchesRoom(r, criteria)) return false
 
     aggregate(buckets, 'inventory', r['inventories'], criteria['inventory'])
-    aggregateRoom(roomHierarchy, r)
 
     return true
   })
@@ -226,9 +233,9 @@ database.action('query', data => {
   if (criteria['inventory']) {
     buckets['inventory'] = {}
   }
-  if (criteria['room']) {
-    roomHierarchy = {}
-  }
+  // if (criteria['room']) {
+  //   roomHierarchy = {}
+  // }
 
   // sorting buckets
   for (const k of Object.keys(buckets)) {

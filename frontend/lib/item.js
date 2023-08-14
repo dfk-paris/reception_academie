@@ -137,6 +137,10 @@ export default class Item {
     return this.d['notes'][i18n.locale]
   }
 
+  descriptionUnident() {
+    return this.d['description_unident']
+  }
+
   dimClass() {
     const area = this.d['area']
 

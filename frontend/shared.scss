@@ -132,6 +132,31 @@ record {
     font-size: 32px;
   }
 
+  p:last-child {
+    margin-bottom: 0;
+  }
+
+  blockquote {
+    position: relative;
+    margin: 0;
+
+    dfk-icon {
+      position: absolute;
+      top: 0;
+      width: auto !important;
+      left: -40px;
+      filter: opacity(0.3);
+
+      svg {
+        width: auto !important;
+      }
+    }
+  }
+
+  .label {
+    font-weight: normal;
+  }
+
   .primary {
     .copy, .study {
       margin-top: -30px;
@@ -181,6 +206,10 @@ record {
       color: $text-color;
     }
 
+    p {
+      color: $text-color;
+    }
+
     help-trigger {
       position: absolute;
       right: 0px;
@@ -203,8 +232,9 @@ record {
     .label {
       width: 150px;
     }
-    
+
     p {
+      margin-top: 1em;
       width: 300px;
 
       &:first-child {
@@ -214,6 +244,14 @@ record {
   }
 
   .sources {
+    .source {
+      margin-top: 1em;
+
+      &:first-child {
+        margin-top: 0;
+      }
+    }
+
     .label {
       width: 150px;
     }
