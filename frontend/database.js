@@ -33,24 +33,22 @@ const aggregate = (buckets, name, value) => {
   }
 }
 
-const matches = (record, criteria, key, locale) => {
-  if (!criteria) return true
-  if (!criteria[key]) return true
+// const matches = (record, criteria, key, locale) => {
+//   if (!criteria) return true
+//   if (!criteria[key]) return true
 
-  console.log(record, key, criteria)
+//   let v = record[key]
+//   if (!v) return false
 
-  let v = record[key]
-  if (!v) return false
+//   if (locale) v = v[locale]
+//   if (!v) return false
 
-  if (locale) v = v[locale]
-  if (!v) return false
+//   for (const c of criteria[key].split('|')) {
+//     if (c == v) return true
+//   }
 
-  for (const c of criteria[key].split('|')) {
-    if (c == v) return true
-  }
-
-  return false
-}
+//   return false
+// }
 
 const matchesInventory = (record, criteria) => {
   if (!criteria) return true

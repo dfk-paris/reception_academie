@@ -116,7 +116,11 @@
     </ul>
 
     <div class="location mt-4 d-flex">
-      <div class="label">{cap(t('location'))}</div>
+      <div class="label">
+        {cap(t('location'))}
+        
+        <help-trigger class="d-print-none position-static ml-2" />
+      </div>
 
       <div>
         <div
@@ -143,10 +147,6 @@
     <div class="sources mt-4 d-flex">
       <div class="label">
         {cap(t('sources'))}
-
-        <help-trigger
-          class="d-print-none position-static ml-2"
-        />
       </div>
       <div>
         <div each={b in props.item.biblio()} class="source d-flex">
