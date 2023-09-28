@@ -1,8 +1,4 @@
 <app>
-  <h1></h1>
-
-  <h2>{cap(t('ra'))}</h2>
-
   <watchlist-toggle id={12} />
 
   <div class="d-flex">
@@ -15,14 +11,18 @@
     </div>
     <div class="w-70 ml-5">
       <template if={state.results}>
-        <div class="d-flex">
-          <div class="w-10">{state.results.total}</div>
+        <div class="d-flex justify-content-between result-width flex-wrap">
+          <div class="mr-3 mb-3">{state.results.total}</div>
           <dfk-pagination
-            class="w-70 mb-5"
+            class="m-auto mb-5"
             page={state.results.page}
             per-page={state.results.per_page}
             total={state.results.total}
             page-to={onInput}
+            next-label={t('next_page')}
+            prev-label={t('prev_page')}
+            first-label={t('first_page')}
+            last-label={t('last_page')}
           />
         </div>
         

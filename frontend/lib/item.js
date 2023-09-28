@@ -98,7 +98,8 @@ export default class Item {
   }
 
   type() {
-    return this.d['type']
+    const t = this.d['type'] || {}
+    return t[i18n.locale]
   }
 
   room() {

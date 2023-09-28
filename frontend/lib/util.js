@@ -45,9 +45,18 @@ const baseUrl = () => {
   return `${url.origin()}${r}`
 }
 
+const localeFromUrl = () => {
+  const url = document.location.href
+  const m = url.match(/\/(en|fr)\//)
+  if (m) return m[1]
+
+  return 'fr'
+}
+
 export {
   baseUrl,
   indexFor,
+  localeFromUrl,
   open,
   params
 }

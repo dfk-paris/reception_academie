@@ -1,6 +1,6 @@
 import config from './dotenv'
 
-import {Search as WendigSearch} from '@wendig/lib'
+import {Search as WendigSearch, i18n} from '@wendig/lib'
 
 export default class Search extends WendigSearch {
   constructor() {
@@ -8,6 +8,8 @@ export default class Search extends WendigSearch {
   }
 
   query(criteria = {}) {
+    criteria['locale'] = i18n.locale
+
     return this.postMessage({action: 'query', criteria})
   }
 

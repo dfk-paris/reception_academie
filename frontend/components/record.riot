@@ -67,16 +67,6 @@
         </div>
       </div>
     </div>
-
-
-    <!-- div class="secondary d-flex flex-wrap justify-content-end align-content-start">
-      <img
-        each={url in props.item.additionalUrls()}
-        src={url}
-        class="image ml-2 mb-2 {url == primaryUrl() ? 'active' : ''}"
-        onclick={event => setPrimary(url, event)}
-      />
-    </div -->
   </div>
 
   <small class="d-block mt-2">{props.item.credits()}</small>
@@ -223,14 +213,6 @@
           </div>
         </div>
 
-        <!-- div>
-          {cap(t('artists_at_dfk')) + ' '}
-
-          <artist-id-links
-            type="dfk"
-            ids={props.item.artistWikidataIds()}
-          />
-        </div -->
         <div class="fw-bold">
           <template if={hasLocation()}>
             {cap(t('work_of_art_at')) + ' '}
@@ -264,21 +246,12 @@
 
     <div class="mb-5">
       <strong>{cap(t('contact'))}</strong>
-      <div>
-        This entry is the result of ongoing research. We would be happy to
-        improve or correct it. If you are aware of additional information or
-        inconsistences, please contact us at
-        collection-academieroyale@dfk-paris.org.
-      </div>
+      <div>{t('contact_text')}</div>
     </div>
 
     <div>
       <strong>{cap(t('use'))}</strong>
-      <div>
-        DFK Paris is not the copyright holder of any of the images used. To
-        reuse images, please refer to the guidelines on the original collection
-        website. Other information may be used freely.
-      </div>
+      <div>{t('use_text')}</div>
     </div>
   </div>
 

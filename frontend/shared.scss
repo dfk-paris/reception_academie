@@ -6,6 +6,11 @@ $text-color: #333333;
 
 dfk-facet {
   @extend facet;
+
+  a {
+    margin-bottom: map-get($spacers, 2);
+    padding: map-get($spacers, 2);
+  }
 }
 
 dfk-pagination {
@@ -17,6 +22,11 @@ dfk-active-filters {
 
   .rounded {
     background-color: #A4A3A3;
+  }
+
+  a {
+    margin-bottom: map-get($spacers, 2);
+    padding: map-get($spacers, 2);
   }
 }
 
@@ -68,6 +78,10 @@ a {
 }
 
 // results
+
+.result-width {
+  width: calc(312px * 2 + 50px);
+}
 
 results {
   display: block;

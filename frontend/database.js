@@ -33,23 +33,6 @@ const aggregate = (buckets, name, value) => {
   }
 }
 
-// const matches = (record, criteria, key, locale) => {
-//   if (!criteria) return true
-//   if (!criteria[key]) return true
-
-//   let v = record[key]
-//   if (!v) return false
-
-//   if (locale) v = v[locale]
-//   if (!v) return false
-
-//   for (const c of criteria[key].split('|')) {
-//     if (c == v) return true
-//   }
-
-//   return false
-// }
-
 const matchesInventory = (record, criteria) => {
   if (!criteria) return true
 
@@ -186,7 +169,8 @@ database.action('query', data => {
 
   let results = storage.filter(r => {
     aggregate(buckets, 'artists', r['artists'])
-    aggregate(buckets, 'type', r['type'])
+    console.log(locale)
+    aggregate(buckets, 'type', r['type'][locale])
     aggregate(buckets, 'technique', r['technique'][locale])
     aggregate(buckets, 'medium', r['medium'][locale])
     aggregate(buckets, 'collection', r['collection'][locale])

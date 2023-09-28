@@ -18,10 +18,14 @@ import RoomFacet from './components/room_facet.riot'
 import RoutedModal from './components/routed_modal.riot'
 
 import config from './lib/dotenv'
+import {localeFromUrl} from './lib/util'
 
 Url.setForceFragment()
 
 i18n.fetch(`${config.STATIC_URL}/translations.json`).then(data => {
+  const url = document.location.href
+  i18n.setLocale(localeFromUrl())
+
   RiotPlugins.setup(riot)
   riot.install(RiotPlugins.i18n)
   riot.install(RiotPlugins.parent)
