@@ -169,7 +169,6 @@ database.action('query', data => {
 
   let results = storage.filter(r => {
     aggregate(buckets, 'artists', r['artists'])
-    console.log(locale)
     aggregate(buckets, 'type', r['type'][locale])
     aggregate(buckets, 'technique', r['technique'][locale])
     aggregate(buckets, 'medium', r['medium'][locale])

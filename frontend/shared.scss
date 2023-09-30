@@ -407,10 +407,25 @@ fly-in {
 
     .item {
       min-width: 220px;
+      font-family: lyons;
+      font-size: 18px;
+      line-height: 24px;
     }
 
     .description {
       flex-shrink: 1;
+      font-family: lyons;
+      font-size: 18px;
+      line-height: 24px;
+
+      a {
+        text-decoration: underline;
+      }
+    }
+
+    &::before {
+      content: '' !important;
+      margin-left: 0 !important;
     }
   }
 }
@@ -452,6 +467,12 @@ dfk-popup.json {
     max-width: 100%;
     white-space: pre-wrap;
     font-size: 14px;
+  }
+}
+
+[is='popup'] {
+  &.open {
+    width: 52vw;
   }
 }
 
