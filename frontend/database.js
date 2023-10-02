@@ -191,7 +191,7 @@ database.action('query', data => {
     if (!matchesInventory(r, criteria['inventory'])) return false
 
 
-    if (!matchesAnyOf(r, criteria, 'type')) return false
+    if (!matchesAnyOf(r, criteria, 'type', null, locale)) return false
     if (!matchesAnyOf(r, criteria, 'artist', 'artists')) return false
     if (!matchesAnyOf(r, criteria, 'technique', null, locale)) return false
     if (!matchesAnyOf(r, criteria, 'medium', null, locale)) return false
