@@ -13,6 +13,12 @@
         class="mr-2"
         onclick={event => download(event)}
       ><dfk-icon type="braces" /></a>
+      <a
+        class="mr-2"
+        href={dataFileUrl()}
+        download
+        title={t('download_dataset')}
+      ><dfk-icon type="download" /></a>
     </div>
 
     <a class="close d-print-none" onclick={event => close(event)}>
@@ -123,6 +129,10 @@
 
       additionalUrls() {
         return this.state.item.additionalUrls()
+      }
+
+      dataFileUrl() {
+        return `${config.STATIC_URL}/data.xlsx`
       }
 
       setPrimary(url) {
