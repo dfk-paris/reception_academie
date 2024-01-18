@@ -106,16 +106,16 @@ export default class Item {
     return this.d['room']
   }
 
-  hasStudy() {
-    return !!this.d['study']
-  }
-
   studyImage() {
     return `${config.STATIC_URL}${this.d['study']['image']}`
   }
 
   studyCaption() {
     return this.d['study'][i18n.locale]
+  }
+
+  hasStudy() {
+    return !!this.d['study']
   }
 
   hasCopy() {

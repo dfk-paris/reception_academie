@@ -1,0 +1,96 @@
+<room-map>
+  <div class="frame">
+    <div class="wrapper"></div>
+  </div>
+
+  <script>
+    import {Url} from '@wendig/lib'
+    import config from '../lib/dotenv'
+
+    export default class {
+      onMounted(props) {
+        this.onUpdated()
+      }
+
+      onUpdated() {
+        this.state.mapId = this.props.mapId
+
+        fetch(`${config.STATIC_URL}/maps/${this.state.mapId}.svg`).
+          then(r => r.text()).
+          then(text => this.render(text))
+      }
+
+      render(text) {
+        const wrapper = document.createElement('div')
+        wrapper.classList.add('wrapper')
+        wrapper.innerHTML = text
+
+        const ns = 'http://www.w3.org/1999/xlink'
+
+        let elements
+        let selector
+
+        elements = wrapper.querySelectorAll("image[*|href='plans.small']")
+        for (const e of elements) {
+          const newUrl = `${config.STATIC_URL}/maps/${this.state.mapId}.jpg`
+          e.setAttributeNS(ns, 'href', newUrl)
+        }
+
+        selector = [
+          "image[*|href^='/default']",
+          "image[*|href^='/copy']",
+          "image[*|href^='/study']"
+        ].join(', ')
+        elements = wrapper.querySelectorAll(selector)
+        for (const e of elements) {
+          const newUrl = `${config.STATIC_URL}/images/${e.getAttributeNS(ns, 'href')}`
+          e.setAttributeNS(ns, 'href', newUrl)
+        }
+
+        selector = [
+          "image[style]",
+          "rect[id^='_']",
+          "polygon[id^='_']"
+        ].join(', ')
+        const es = wrapper.querySelectorAll(selector)
+        for (const e of es) {
+          e.addEventListener('click', event => {
+            if (e.tagName == 'image') {
+              const url = e.getAttributeNS(ns, 'href')
+              const parts = url.split('/')
+              const file = parts[parts.length - 1]
+
+              const [inv, id] = file.split('.')
+              this.openTab(id)
+            }
+
+            if (e.tagName == 'rect') {
+              const a = e.getAttribute('id')
+              const id = a.replaceAll(/_|x3/g, '')
+              this.openTab(id)
+            }
+
+            if (e.tagName == 'polygon') {
+              const a = e.getAttribute('id')
+              const id = a.replaceAll(/_|x3/g, '')
+              this.openTab(id)
+            }
+          })
+        }
+
+        const old = this.root.querySelector('.wrapper')
+        old.replaceWith(wrapper)
+      }
+
+      openTab(id) {
+        if (!id) return
+          
+        const checkStr = parseInt(id) + ''
+        if (checkStr !== id) return
+
+        const target = config.APP_URL + '/#/records/' + id
+        window.open(target, '_blank').focus()
+      }
+    }
+  </script>
+</room-map>

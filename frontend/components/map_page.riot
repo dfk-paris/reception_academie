@@ -1,0 +1,26 @@
+<map-page>
+  <template if={state.mapId == 'salon'}>
+    <div is="room-map" map-id="salon" />
+    <div is="room-map" map-id="salon-2" />
+  </template>
+
+  <template if={state.mapId != 'salon'}>
+    <div is="room-map" map-id={state.mapId} />
+  </template>
+
+  <script>
+    import {Url} from '@wendig/lib'
+
+    import RoomMap from './room_map.riot'
+
+    export default class {
+      static components = {RoomMap}
+
+      onBeforeMount() {
+        const mapId = Url.current().hashPath().split('/')[2]
+
+        this.state.mapId = mapId
+      }
+    }
+  </script>
+</map-page>

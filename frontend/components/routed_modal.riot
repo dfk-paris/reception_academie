@@ -14,6 +14,7 @@
     import DfkRoutedModal from '@dfk-paris/frontend/src/components/routed_modal.riot'
 
     import RecordViewer from './record_viewer.riot'
+    import MapPage from './map_page.riot'
     import Watchlist from './watchlist.riot'
 
     export default class {
@@ -29,6 +30,7 @@
         return [
           {url: /^$/, component: null},
           {url: /^\/records\/(?<id>\d+)$/, component: RecordViewer},
+          {url: /^\/maps\/(?<id>[a-z0-9\-]+)$/, component: MapPage},
           {url: /^\/watchlist$/, component: Watchlist}
         ]
       }

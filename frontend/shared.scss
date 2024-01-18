@@ -188,6 +188,21 @@ record {
     }
   }
 
+  .room {
+    a {
+      display: inline-block;
+      width: 18px;
+      position: relative;
+      top: 3px;
+      left: 8px;
+
+      svg {
+        width: 18px;
+        height: 18px;
+      }
+    }
+  }
+
   .fields {
     padding: 0;
     margin-left: 0;
@@ -556,5 +571,46 @@ help-trigger {
     padding-left: 9px;
     text-decoration: none;
     font-weight: 700;
+  }
+}
+
+
+// room-map
+
+[is='room-map'] {
+  @namespace xlink "http://www.w3.org/1999/xlink";
+
+  .frame {
+    width: 80%;
+    margin: 50px auto;
+  }
+
+  .indicator {
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: gray;
+    width: 200px;
+  }
+
+  svg {
+    g[style] {
+      fill: gray;
+    }
+
+    image {
+      cursor: pointer;
+    }
+
+    [class^="st"] {
+      opacity: 0;
+      cursor: pointer;
+    }
+
+    // image[xlink|href*='default'],
+    // rect[id^='_x'],
+    // polygon[xlink|href*='default'] {
+    //   cursor: pointer;
+    // }
   }
 }

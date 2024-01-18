@@ -15,21 +15,6 @@
           class="d-block w-100"
           src={primaryUrl()}
         />
-
-        <div
-          if={!props.item.hasImage()}
-          class="w-100"
-        >
-          <blockquote each={quote in props.item.descriptionUnident()}>
-            <dfk-icon type="quotes" />
-
-            {quote}
-          </blockquote>
-        </div>
-
-        <blockquote>
-          
-        </blockquote>
       </div>
       <div class="col-4">
         <div class="d-inline-block h-100 ml-7">
@@ -67,6 +52,13 @@
         </div>
       </div>
     </div>
+  </div>
+
+  <div class="row flex-wrap" if={!props.item.hasImage()}>
+    <template each={quote in props.item.descriptionUnident()}>
+      <div class="w-50 mb-3">{quote}</div>
+      <div class="w-50 mb-3"></div>
+    </template>
   </div>
 
   <small class="d-block mt-2">{props.item.credits()}</small>
@@ -119,7 +111,13 @@
         >
           <div class="fw-bold mr-5">{room[0]}</div>
           <div class="fw-bold">
-            <div each={e in room[1]}>{e}</div>
+            <div each={e in room[1]}>
+              {e}
+
+              <a if={roomUrl(e)} href={roomUrl(e)}>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-map"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon><line x1="8" y1="2" x2="8" y2="18"></line><line x1="16" y1="6" x2="16" y2="22"></line></svg>
+              </a>
+            </div>
           </div>
         </div>
       </div>
@@ -258,6 +256,7 @@
   <script>
     import {i18n, util} from '@wendig/lib'
 
+    import config from '../lib/dotenv'
     import {baseUrl} from '../lib/util'
 
     import ArtistIdLinks from './artist_id_links.riot'
@@ -317,6 +316,22 @@
 
       hasAnyLinks() {
         return this.hasAnyArtists() || this.hasPlateLink() || this.hasLocation()
+      }
+
+      roomUrl(room) {
+        const id = {
+          "Salle d'Assemblée": 'salle_assemblee',
+          "Vestibule": 'vestibule',
+          "Troisième salle": 'salle-3',
+          "Salon": 'salon',
+          "Salle séparée des autres": 'salle-separee'
+        }[room]
+
+        console.log(room)
+
+        if (!id) return null
+
+        return `${config.APP_URL}#/maps/${id}`
       }
 
       locale() {

@@ -1,6 +1,9 @@
 #!/bin/bash -e
 
 export APP_ENV=production
+export APP_URL_EN="https://www.dfk-paris.org/en/page/academie-database-3846.html"
+export APP_URL_DE="https://www.dfk-paris.org/de/page/academie-database-3846.html"
+export APP_URL_FR="https://www.dfk-paris.org/fr/page/academie-database-3846.html"
 export STATIC_URL="https://static.dfkg.org/ooV9no9ood"
 export USE_SSL="true"
 
@@ -8,3 +11,4 @@ npm run import
 npm run build
 
 rsync -av public/ root@10.10.1.34:/var/storage/host/static/current/ooV9no9ood/
+rsync -av data/images.320/ root@10.10.1.34:/var/storage/host/static/current/ooV9no9ood/images.320/
