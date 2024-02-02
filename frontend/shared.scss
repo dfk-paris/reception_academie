@@ -605,6 +605,15 @@ help-trigger {
     [class^="st"] {
       opacity: 0;
       cursor: pointer;
+
+      fill: black;
+    }
+
+    g.wendig > rect {
+      opacity: 0;
+      cursor: pointer;
+
+      fill: black;
     }
 
     // image[xlink|href*='default'],

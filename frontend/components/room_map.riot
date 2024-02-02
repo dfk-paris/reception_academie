@@ -4,7 +4,7 @@
   </div>
 
   <script>
-    import {Url} from '@wendig/lib'
+    import {Url, i18n} from '@wendig/lib'
     import config from '../lib/dotenv'
 
     export default class {
@@ -30,7 +30,7 @@
         let elements
         let selector
 
-        elements = wrapper.querySelectorAll("image[*|href='plans.small']")
+        elements = wrapper.querySelectorAll("image.plan")
         for (const e of elements) {
           const newUrl = `${config.STATIC_URL}/maps/${this.state.mapId}.jpg`
           e.setAttributeNS(ns, 'href', newUrl)
@@ -54,7 +54,10 @@
         ].join(', ')
         const es = wrapper.querySelectorAll(selector)
         for (const e of es) {
+          if (e.classList.contains('plan')) continue
+
           e.addEventListener('click', event => {
+            console.log(event.target, e)
             if (e.tagName == 'image') {
               const url = e.getAttributeNS(ns, 'href')
               const parts = url.split('/')
@@ -80,6 +83,7 @@
 
         const old = this.root.querySelector('.wrapper')
         old.replaceWith(wrapper)
+
       }
 
       openTab(id) {
@@ -88,7 +92,7 @@
         const checkStr = parseInt(id) + ''
         if (checkStr !== id) return
 
-        const target = config.APP_URL + '/#/records/' + id
+        const target = config.APP_URLS[i18n.locale] + '/#/records/' + id
         window.open(target, '_blank').focus()
       }
     }

@@ -331,7 +331,8 @@
 
         if (!id) return null
 
-        return `${config.APP_URL}#/maps/${id}`
+        const app_url = config.APP_URLS[i18n.locale]
+        return `${app_url}#/maps/${id}`
       }
 
       locale() {
