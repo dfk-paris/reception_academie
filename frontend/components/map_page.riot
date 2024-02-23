@@ -9,7 +9,17 @@
   </template>
 
   <div class="w-50 my-5 ml-5">
-    {cap(t('map_source'))}
+    <div class="fw-bold">{cap(t('map_cite_this_page'))}</div>
+    <div is="dfk-raw" class="mb-3" html={mapCiteThisPage()}></div>
+
+    <div class="fw-bold">{cap(t('map_cite_the_dataset'))}</div>
+    <div is="dfk-raw" class="mb-3" html={this.t('map_cite_the_dataset_text')}></div>
+
+    <div class="fw-bold">{cap(t('map_contact'))}</div>
+    <div is="dfk-raw" class="mb-3" html={this.t('map_contact_text')}></div>
+
+    <div class="fw-bold">{cap(t('map_use'))}</div>
+    <div is="dfk-raw" class="mb-3" html={this.t('map_use_text')}></div>
   </div>
 
   <script>
@@ -24,6 +34,14 @@
         const mapId = Url.current().hashPath().split('/')[2]
 
         this.state.mapId = mapId
+      }
+
+      mapCiteThisPage() {
+        const tpl = this.cap(this.t('map_cite_this_page_text'))
+
+        return tpl.
+          replace(/\%\{room_label\}/, this.t('map_name_' + this.state.mapId)).
+          replace(/\%\{room_id\}/, this.state.mapId)
       }
     }
   </script>

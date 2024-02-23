@@ -7,6 +7,7 @@ import DfkFacet from '@dfk-paris/frontend/src/components/facet.riot'
 import DfkIcon from '@dfk-paris/frontend/src/components/icon.riot'
 import DfkInput from '@dfk-paris/frontend/src/components/input.riot'
 import DfkPagination from '@dfk-paris/frontend/src/components/pagination.riot'
+import DfkRaw from '@dfk-paris/frontend/src/components/raw.riot'
 
 import App from './components/app.riot'
 import Dims from './components/dims.riot'
@@ -37,6 +38,7 @@ i18n.fetch(`${config.STATIC_URL}/translations.json`).then(data => {
   riot.register('dfk-icon', DfkIcon)
   riot.register('dfk-input', DfkInput)
   riot.register('dfk-pagination', DfkPagination)
+  riot.register('dfk-raw', DfkRaw)
 
   riot.register('app', App)
   riot.register('dims', Dims)

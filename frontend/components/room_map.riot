@@ -43,7 +43,7 @@
         ].join(', ')
         elements = wrapper.querySelectorAll(selector)
         for (const e of elements) {
-          const newUrl = `${config.STATIC_URL}/images/${e.getAttributeNS(ns, 'href')}`
+          const newUrl = `${config.STATIC_URL}/images.640${e.getAttributeNS(ns, 'href')}`
           e.setAttributeNS(ns, 'href', newUrl)
         }
 
@@ -57,13 +57,15 @@
           if (e.classList.contains('plan')) continue
 
           e.addEventListener('click', event => {
-            console.log(event.target, e)
             if (e.tagName == 'image') {
               const url = e.getAttributeNS(ns, 'href')
               const parts = url.split('/')
               const file = parts[parts.length - 1]
 
-              const [inv, id] = file.split('.')
+              let [inv, id] = file.split('.')
+
+              id = id.replace(/(a|b)$/, '')
+
               this.openTab(id)
             }
 
