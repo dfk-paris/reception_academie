@@ -1,4 +1,4 @@
-import {Url} from '@wendig/lib'
+import {Url, i18n} from '@wendig/lib'
 import config from '../lib/dotenv'
 import Item from '../lib/item'
 
@@ -53,10 +53,28 @@ const localeFromUrl = () => {
   return 'fr'
 }
 
+const roomUrl = (inv, room) => {
+  if (inv != 1715) return
+
+  const id = {
+    "Salle d’Assemblée": 'salle-assemblee',
+    "Vestibule": 'vestibule',
+    "Troisième salle": 'salle-3',
+    "Salon": 'salon',
+    "Salle séparée des autres": 'salle-separee'
+  }[room]
+
+  if (!id) return null
+
+  const app_url = config.APP_URLS[i18n.locale]
+  return `${app_url}#/maps/${id}`
+}
+
 export {
   baseUrl,
   indexFor,
   localeFromUrl,
   open,
-  params
+  params,
+  roomUrl
 }

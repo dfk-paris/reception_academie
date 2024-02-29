@@ -8,39 +8,35 @@
         >
           <dfk-icon type="arrow-right" />
         </a>
-        <div class="h-100 w-100 ml-6 overflow-y-scroll">
+        <div class="h-100 w-100 pl-7 overflow-y-scroll">
           <h2 class="mt-7">{cap(t('help'))}</h2>
 
           <ul class="pl-0 ml-0 mt-6 mr-7 mb-7">
-            <li class="d-flex">
-              <div class="item fw-bold">{cap(t('inventories_and_rooms'))}</div>
+            <li>
+              <div class="header fw-bold mb-3">{cap(t('inventories_and_rooms'))}</div>
               <div class="description" data-id="i_and_r"></div>
             </li>
 
-            <li class="d-flex">
-              <div class="item">
+            <li>
+              <div class="description" data-id="dims"></div>
+
+              <div class="mt-3 pt-3 mb-3">
                 <size-indicator
                   wh={[80, 120]}
                   ref-height={170.0}
                   render-height={80}
                 />
               </div>
-              <div class="description" data-id="dims"></div>
             </li>
 
-            <li class="d-flex">
+            <li>
               <div class="item">
                 <dfk-icon type="book" />
               </div>
               <div class="description" data-id="book"></div>
             </li>
 
-            <li class="d-flex d-none">
-              <div class="item">TODO</div>
-              <div class="description" data-id="spatial"></div>
-            </li>
-
-            <li class="d-flex">
+            <li>
               <div class="item">
                 <dfk-icon type="print" />
               </div>

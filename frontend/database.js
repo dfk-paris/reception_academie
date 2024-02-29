@@ -67,6 +67,8 @@ const matchesTerms = (record, locale, terms) => {
   let descriptionUnident = record['description_unident'] || []
   descriptionUnident = util.fold(descriptionUnident.join(' '))
   const id = `${record['id']}`
+  const collection = util.fold(record['collection'][locale]) || ''
+  const location = util.fold(record['location']) || ''
 
   for (const token of terms.split(/\s+/)) {
     const c = util.fold(token)
@@ -75,6 +77,8 @@ const matchesTerms = (record, locale, terms) => {
       artist.includes(c) ||
       notes.includes(c) ||
       descriptionUnident.includes(c) ||
+      location.includes(c) ||
+      // collection.includes(c) ||
       c == id
     )
     if (!m) return false
@@ -173,6 +177,7 @@ database.action('query', data => {
     aggregate(buckets, 'technique', r['technique'][locale])
     aggregate(buckets, 'medium', r['medium'][locale])
     aggregate(buckets, 'collection', r['collection'][locale])
+    aggregate(buckets, 'location', r['location'])
 
     if (criteria.id) {
       if (!Array.isArray(criteria.id)) {

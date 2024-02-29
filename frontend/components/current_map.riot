@@ -1,0 +1,87 @@
+<current-map>
+  <div data-id="target" class="w-100 h-100"></div>
+
+  <script>
+    import {Url} from '@wendig/lib'
+    import * as L from 'leaflet'
+
+    import search from '../lib/search.instance'
+
+    export default class {
+      onMounted(props, state) {
+        state.coords = {
+          'Musée du Louvre': [48.86115, 2.33452],
+          'Château de Versailles': [48.80442, 2.12158],
+          'Musée Fabre, Montpellier': [43.61175, 3.87975]
+        }
+
+        if (props.data) {
+          this.setup()
+        } else {
+          this.load()
+        }
+      }
+
+      load() {
+        search.query().then(data => {
+          this.state.data = data
+
+          this.setup()
+        })
+      }
+
+      setup() {
+        const target = this.root.querySelector("[data-id='target']")
+        const map = L.map(target, {
+          attribution: false,
+          zoom: 3,
+          zoomControl: true,
+          attributionControl: false,
+          center: [48, 0],
+          minZoom: 3,
+          maxZoom: 6,
+        })
+
+        // L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(state.map);
+        // L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png').addTo(state.map)
+        L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}').addTo(map)
+
+        const data = this.state.data || this.props.data
+        const buckets = data['buckets']['location']['buckets']
+
+        for (const b of buckets) {
+          const coords = this.state.coords[b['key']]
+          if (!coords) continue
+
+          let radius = b['doc_count'] / 161 * 30
+          radius = Math.max(radius, 5)
+
+          const m = L.circleMarker(coords, {
+            radius,
+            weight: 0,
+            fillColor: '#009bb5',
+            color: '#009bb5'
+          })
+
+          m.on('click', event => {
+            const url = Url.current()
+            url.updateHashParams({collection: b['key']})
+            url.apply()
+          })
+
+          m.on('mouseover', event => {
+            m.setStyle({fillOpacity: 0.3})
+          })
+
+          m.on('mouseout', event => {
+            m.setStyle({fillOpacity: 0.2})
+          })
+
+          m.addTo(map);
+        }
+
+        this.state.map = map
+      }
+    }
+  </script>
+</current-map>

@@ -10,6 +10,7 @@ import DfkPagination from '@dfk-paris/frontend/src/components/pagination.riot'
 import DfkRaw from '@dfk-paris/frontend/src/components/raw.riot'
 
 import App from './components/app.riot'
+import CurrentMap from './components/current_map.riot'
 import Dims from './components/dims.riot'
 import FlyIn from './components/fly_in.riot'
 import HelpTrigger from './components/help_trigger.riot'
@@ -41,6 +42,7 @@ i18n.fetch(`${config.STATIC_URL}/translations.json`).then(data => {
   riot.register('dfk-raw', DfkRaw)
 
   riot.register('app', App)
+  riot.register('current-map', CurrentMap)
   riot.register('dims', Dims)
   riot.register('fly-in', FlyIn)
   riot.register('help-trigger', HelpTrigger)
