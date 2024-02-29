@@ -11,7 +11,7 @@ dfk-facet {
   a {
     margin-bottom: map-get($spacers, 2);
     padding: map-get($spacers, 2);
-    font-family: cera-pro;
+    font-family: cera-pro !important;
   }
 }
 
