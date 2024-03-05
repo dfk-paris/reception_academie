@@ -9,15 +9,15 @@
     class="d-flex justify-content-between"
   >
     <div class="primary w-100 row">
-      <div class="col-7">
+      <div class="col-6">
         <img
           if={props.item.hasImage()}
           class="d-block"
-          style="max-height: 576px; max-width: 100%;"
+          style="max-height: calc(576px / 5 * 4); max-width: calc(576px / 5 * 4)"
           src={primaryUrl()}
         />
       </div>
-      <div class="col-2">
+      <div class="col-3">
         <div class="d-inline-block h-100 ml-7">
           <div class="h-100 d-flex flex-column justify-content-between">
             <help-trigger class="d-print-none align-self-end" />
@@ -35,7 +35,7 @@
         <div class="study text-end" if={props.item.hasStudy()}>
           <div class="fw-bold mb-2">{cap(t('study'))}</div>
 
-          <img class="w-50 mb-2" src="{props.item.studyImage()}" />
+          <img class="w-75 mb-2" src="{props.item.studyImage()}" />
           
           <small>
             <raw class="d-block text-end" html={props.item.studyCaption()} />

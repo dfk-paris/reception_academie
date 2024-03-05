@@ -166,7 +166,8 @@ database.action('query', data => {
     'medium': {},
     'technique': {},
     'collection': {},
-    'artists': {}
+    'artists': {},
+    'location': {}
   }
 
   let roomHierarchy = {}
