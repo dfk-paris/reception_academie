@@ -3,7 +3,7 @@ import {Database} from '@wendig/lib'
 import config from './lib/dotenv'
 
 let dbs = null
-let storage = {en: {}, de: {}}
+let storage = {}
 let database = new Database()
 onmessage = database.handler
 
@@ -11,13 +11,21 @@ const promises = []
 
 promises.push(
   fetch(`${config.STATIC_URL}/unified.json`).then(r => r.json()).then(data => {
-    storage = data.sort((a, b) => {
+    storage['records'] = data.sort((a, b) => {
       b.id - a.id
     })
-
-    database.loaded()
   })
 )
+
+promises.push(
+  fetch(`${config.STATIC_URL}/coordinates.json`).then(r => r.json()).then(data => {
+    storage['coordinates'] = data
+  })
+)
+
+Promise.all(promises).then(values => {
+  database.loaded()
+})
 
 const aggregate = (buckets, name, value) => {
   let keys = value || 'null'
@@ -172,7 +180,7 @@ database.action('query', data => {
 
   let roomHierarchy = {}
 
-  let results = storage.filter(r => {
+  let results = storage['records'].filter(r => {
     aggregate(buckets, 'artists', r['artists'])
     aggregate(buckets, 'type', r['type'][locale])
     aggregate(buckets, 'technique', r['technique'][locale])
@@ -285,6 +293,10 @@ database.action('query', data => {
   response.rooms = rooms
 
   return response
+})
+
+database.action('coordinates', data => {
+  return storage['coordinates']
 })
 
 const elastify = (agg) => {

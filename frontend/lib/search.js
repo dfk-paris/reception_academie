@@ -18,4 +18,8 @@ export default class Search extends WendigSearch {
     
     return this.postMessage({action: 'query', criteria})
   }
+
+  coordinates(id) {
+    return this.postMessage({action: 'coordinates'})
+  }
 }
