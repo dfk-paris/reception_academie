@@ -8,18 +8,16 @@
     import search from '../lib/search.instance'
 
     export default class {
-      onMounted(props, state) {
-        state.coords = {
-          'Musée du Louvre': [48.86115, 2.33452],
-          'Château de Versailles': [48.80442, 2.12158],
-          'Musée Fabre, Montpellier': [43.61175, 3.87975]
-        }
+      onBeforeMount(props, state) {
+        search.coordinates().then(data => {
+          state.coords = data
 
-        if (props.data) {
-          this.setup()
-        } else {
-          this.load()
-        }
+          if (props.data) {
+            this.setup()
+          } else {
+            this.load()
+          }
+        })
       }
 
       load() {
@@ -34,10 +32,11 @@
         const target = this.root.querySelector("[data-id='target']")
         const map = L.map(target, {
           attribution: false,
-          zoom: 3,
+          zoom: 5,
           zoomControl: true,
           attributionControl: false,
-          center: [48, 0],
+          // center: [48, 0],
+          center: [46.830133640447414, 2.3486817523301444],
           minZoom: 3,
           maxZoom: 6,
         })
@@ -50,8 +49,9 @@
         const buckets = data['buckets']['location']['buckets']
 
         for (const b of buckets) {
-          const coords = this.state.coords[b['key']]
+          let coords = this.state.coords[b['key']]
           if (!coords) continue
+          coords = coords['coordinates']
 
           let radius = b['doc_count'] / 161 * 30
           radius = Math.max(radius, 5)
@@ -81,6 +81,7 @@
         }
 
         this.state.map = map
+        window.m = map
       }
     }
   </script>
