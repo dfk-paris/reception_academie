@@ -162,7 +162,6 @@
           })
         })
         Promise.all(promises).then(datas => {
-          console.log(css)
           util.printElement(this.root.parentElement, {css, print: true})
         })
       }

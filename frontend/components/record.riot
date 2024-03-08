@@ -9,26 +9,23 @@
     class="d-flex justify-content-between"
   >
     <div class="primary w-100 row">
-      <div class="col-6">
+      <div class="col-9 d-flex">
         <img
           if={props.item.hasImage()}
           class="d-block"
           style="max-height: calc(576px / 5 * 4); max-width: calc(576px / 5 * 4)"
           src={primaryUrl()}
         />
-      </div>
-      <div class="col-3">
-        <div class="d-inline-block h-100 ml-7">
-          <div class="h-100 d-flex flex-column justify-content-between">
-            <help-trigger class="d-print-none align-self-end" />
 
-            <size-indicator
-              if={props.item.hasImage()}
-              wh={props.item.wh()}
-              ref-height={170.0}
-              render-height={100}
-            />
-          </div>
+        <div class="h-100 d-flex flex-column justify-content-between ml-4">
+          <help-trigger class="d-print-none align-self-start" />
+
+          <size-indicator
+            if={props.item.hasImage()}
+            wh={props.item.wh()}
+            ref-height={170.0}
+            render-height={100}
+          />
         </div>
       </div>
       <div class="col-3">
