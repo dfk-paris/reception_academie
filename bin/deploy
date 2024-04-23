@@ -11,4 +11,4 @@ npm run import
 npm run build
 
 rsync -av -L public/ root@10.10.1.34:/var/storage/host/static/current/ooV9no9ood/
-rsync -av data/images.320/ root@10.10.1.34:/var/storage/host/static/current/ooV9no9ood/images.320/
+# rsync -av data/images.320/ root@10.10.1.34:/var/storage/host/static/current/ooV9no9ood/images.320/
