@@ -32,7 +32,14 @@ export default class Item {
   }
 
   artistList() {
-    return this.d['artists_human'][i18n.locale].join(', ')
+    let result = this.d['artists_human'][i18n.locale].join(', ')
+    const other = this.d['after_other_artist']
+
+    if (other) {
+      result = `${result} (after ${other})`
+    }
+
+    return result
   }
 
   artistWikidataIds() {
