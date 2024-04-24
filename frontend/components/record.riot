@@ -33,19 +33,32 @@
           <div class="fw-bold mb-2">{cap(t('study'))}</div>
 
           <img class="w-75 mb-2" src="{props.item.studyImage()}" />
+          <br />
           
           <small>
             <raw class="d-block text-end" html={props.item.studyCaption()} />
           </small>
         </div>
 
-        <div class="copy" if={props.item.hasCopy()}>
+        <div class="copy text-end" if={props.item.hasCopy()}>
           <div class="fw-bold mb-2">{cap(t('copy'))}</div>
 
-          <img class="d-block w-50 mb-2" src="{props.item.copyImage()}" />
+          <img class="w-75 mb-2" src="{props.item.copyImage()}" />
+          <br />
           
           <small>
             <raw html={props.item.copyCaption()} />
+          </small>
+        </div>
+
+        <div class="original text-end" if={props.item.hasOriginal()}>
+          <div class="fw-bold mb-2">{cap(t('orig_sculpt'))}</div>
+
+          <img class="w-75 mb-2" src="{props.item.originalImage()}" />
+          <br />
+          
+          <small>
+            <raw html={props.item.originalCaption()} />
           </small>
         </div>
       </div>
@@ -94,6 +107,11 @@
         <strong>{props.item.type()}</strong>
       </li>
     </ul>
+
+    <div class="acquisition-date mt-4 d-flex">
+      <div class="label">{cap(t('acquisition_date'))}</div>
+      <strong>{props.item.humanAcquisitionDate()}</strong>
+    </div>
 
     <div class="location mt-4 d-flex">
       <div class="label">
@@ -214,7 +232,7 @@
         <div class="fw-bold">
           <template if={hasLocation()}>
             {cap(t('work_of_art_at')) + ' '}
-            <a href={props.item.collectionLink()}>
+            <a href={props.item.collectionLink()} target="_blank">
               {props.item.location()}
             </a>
           </template>

@@ -7,6 +7,22 @@
     {cap(t('search_criteria'))}
   </div>
 
+  <div class="my-4">
+    {cap(t('acquisition_date'))}
+  </div>
+
+  <div
+    if={props.results}
+    is="range-control"
+    on-inputs-changed={onInputDelayed}
+    from={props.criteria['from']}
+    to={props.criteria['to']}
+    min={minAcquisitonDate()}
+    max={maxAcquisitonDate()}
+    bins={props.results.buckets.adate.buckets.map(e => e['doc_count'])}
+    class="mb-4"
+  />
+
   <div class="d-flex">
     <dfk-input
       placeholder={cap(t('fulltext_search'))}
@@ -145,6 +161,18 @@
         }
 
         return false
+      }
+
+      minAcquisitonDate() {
+        const years = this.props.results.buckets.adate.buckets.map(e => e['key'])
+
+        return Math.min(...years)
+      }
+
+      maxAcquisitonDate() {
+        const years = this.props.results.buckets.adate.buckets.map(e => e['key'])
+
+        return Math.max(...years)
       }
     }
   </script>

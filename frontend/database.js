@@ -114,6 +114,29 @@ const matchesRoom = (record, criteria) => {
   return false
 }
 
+const matchesAcquisitionDate = (r, criteria) => {
+  const adate = r['acquisition_date']
+  if (!adate) return true
+
+  let year = null
+  if (adate['date']) year = adate['date'][0]
+  if (adate['year_range']) year = adate['year_range'][1]
+
+  let from = criteria['from']
+  if (from) {
+    from = parseInt(from)
+    if (from > year) return false
+  }
+
+  let to = criteria['to']
+  if (from) {
+    to = parseInt(to)
+    if (to < year) return false
+  }
+
+  return true
+}
+
 const sanitizeCriteria = (input) => {
   let criteria = input || {}
   criteria['page'] = parseInt(criteria['page'] || 1)
@@ -150,6 +173,25 @@ const aggregateRoom = (hierarchy, record) => {
   }
 }
 
+const aggregateAcquisitionDate = (buckets, value) => {
+  if (!value) return
+
+  let v = null
+
+  if (value['date']) {
+    v = value['date'][0]
+  }
+
+  if (value['year_range']) {
+    v = value['year_range'][1]
+  }
+
+  if (!v) return
+
+  buckets['adate'][v] = buckets['adate'][v] || 0
+  buckets['adate'][v] += 1
+}
+
 const dropBucket = (buckets, key, value) => {
   if (!value) return
   if (!buckets[key]) return
@@ -175,7 +217,8 @@ database.action('query', data => {
     'technique': {},
     'collection': {},
     'artists': {},
-    'location': {}
+    'location': {},
+    'adate': {}
   }
 
   let roomHierarchy = {}
@@ -187,6 +230,7 @@ database.action('query', data => {
     aggregate(buckets, 'medium', r['medium'][locale])
     aggregate(buckets, 'collection', r['collection'][locale])
     aggregate(buckets, 'location', r['location'])
+    aggregateAcquisitionDate(buckets, r['acquisition_date'])
 
     if (criteria.id) {
       if (!Array.isArray(criteria.id)) {
@@ -204,12 +248,13 @@ database.action('query', data => {
     if (!matchesTerms(r, locale, criteria['terms'])) return false
     if (!matchesInventory(r, criteria['inventory'])) return false
 
-
     if (!matchesAnyOf(r, criteria, 'type', null, locale)) return false
     if (!matchesAnyOf(r, criteria, 'artist', 'artists')) return false
     if (!matchesAnyOf(r, criteria, 'technique', null, locale)) return false
     if (!matchesAnyOf(r, criteria, 'medium', null, locale)) return false
     if (!matchesAnyOf(r, criteria, 'collection', null, locale)) return false
+
+    if (!matchesAcquisitionDate(r, criteria)) return false
 
     aggregateRoom(roomHierarchy, r)
     if (!matchesRoom(r, criteria)) return false
@@ -242,6 +287,8 @@ database.action('query', data => {
     })
     buckets[k] = util.sortBy(docs, d => d.count).reverse()
   }
+
+  buckets['adate'] = util.sortBy(buckets['adate'], d => d.key)
 
   for (const k of Object.keys(buckets)) {
     buckets[k] = elastify(buckets[k])

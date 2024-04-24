@@ -183,7 +183,7 @@ record {
   }
 
   .primary {
-    .copy, .study {
+    .copy, .study, .original {
       margin-top: -30px;
     }
   }
@@ -266,6 +266,13 @@ record {
   .location {
     .label {
       width: 150px;
+    }
+  }
+
+  .acquisition-date {
+    .label {
+      width: 150px;
+      padding-right: 20px;
     }
   }
 
@@ -646,4 +653,53 @@ help-trigger {
 current-map {
   display: block;
   width: 100%;
+}
+
+[is='range-control'] {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
+  .graph {
+    flex-grow: 1;
+    overflow: clip;
+    overflow-x: visible;
+
+    width: 100%;
+
+    svg {
+      display: block;
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+
+      rect {
+        transition:
+          height 0.5s ease-out,
+          y 0.5s ease-out;
+      }
+
+      circle {
+        cursor: pointer;
+      }
+
+      g.controls {
+        fill: gray;
+      }
+
+      g.bins {
+        fill: #aaaaaa;
+
+        rect.active {
+          fill: #1e1e1e;
+        }
+      }
+    }
+  }
+
+  .literals {
+    display: flex;
+    justify-content: space-between;
+    font-size: 16px;
+  }
 }

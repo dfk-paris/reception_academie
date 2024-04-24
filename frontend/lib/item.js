@@ -1,6 +1,28 @@
+import strftime from 'strftime'
 import {i18n} from '@wendig/lib'
 import config from '../lib/dotenv'
 import {baseUrl} from '../lib/util'
+
+const toDate = {
+  en: strftime,
+  fr: strftime.localize({
+    identifier: 'fr-FR',
+    months: [
+      'janvier',
+      'février',
+      'mars',
+      'avril',
+      'mai',
+      'juin',
+      'juillet',
+      'août',
+      'septembre',
+      'octobre',
+      'novembre',
+      'décembre'
+    ]
+  })
+}
 
 export default class Item {
   constructor(data) {
@@ -21,6 +43,17 @@ export default class Item {
 
   date() {
     return this.d['date']
+  }
+
+  humanAcquisitionDate() {
+    const value = this.d['acquisition_date']
+    if (!value) return null
+    if (!value['date']) return null
+
+    const date = new Date(...value['date'])
+
+    const format = "%d %B %Y"
+    return toDate[i18n.locale](format, date)
   }
 
   orientation() {
@@ -135,6 +168,18 @@ export default class Item {
 
   copyCaption() {
     return this.d['copy'][i18n.locale]
+  }
+
+  hasOriginal() {
+    return !!this.d['original']
+  }
+
+  originalImage() {
+    return `${config.STATIC_URL}${this.d['original']['image']}`
+  }
+
+  originalCaption() {
+    return this.d['original'][i18n.locale]
   }
 
   plateLink() {

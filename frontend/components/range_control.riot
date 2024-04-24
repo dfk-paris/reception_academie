@@ -1,0 +1,198 @@
+<range-control>
+  <div class="{props.min == props.max ? 'd-none' : 'd-block'} {props.class}">
+    <div class="graph">
+      <svg viewBox="0 0 {svgWidth()} {svgHeight()}" class={isSparse() && 'sparse'}>
+        <g class="bins">
+          <rect
+            each={(bin, index) in props.bins}
+            x="calc({binIndexToPercent(index)}% - {(props.binWidth || 1) / 2}px)"
+            height="{binToHeight(bin)}%"
+            y="{90 - binToHeight(bin) - 10}%"
+            width={props.binWidth || 1}
+            class={activeBin(index) ? 'active' : ''}
+          />
+        </g>
+        <g class="background" fill="#aaaaaa">
+          <rect width="100%" height="1" x="0%" y="90%" />
+        </g>
+        <g class="controls">
+          <circle class="from" cx="{valueToPercent(from())}%" cy="90%" r="8" />
+          <circle class="to" cx="{valueToPercent(to())}%" cy="90%" r="8" />
+        </g>
+      </svg>
+    </div>
+
+    <div class="literals">
+      <div>{props.min}</div>
+      <div>{from()} – {to()}</div>
+      <div>{props.max}</div>
+    </div>
+  </div>
+
+  <template if={props.min == props.max}>
+    <div class="literals">
+      <div>{from()}</div>
+    </div>
+  </template>
+
+  <script>
+    import * as d3Selection from 'd3-selection'
+    import * as d3Scale from 'd3-scale'
+    import * as d3Drag from 'd3-drag'
+
+    const d3 = Object.assign({}, d3Selection, d3Scale, d3Drag)
+
+    const toInt = (v) => {
+      return typeof v == 'string' ? parseInt(v) : v
+    }
+
+    export default class {
+      clamp(value) {
+        const t = Math.max(this.props.min, value)
+        return Math.min(t, this.props.max)
+      }
+
+      from() {
+        const v = (this.state.dragging ? this.state.fromTmp : this.propsFrom())
+        if (v == undefined) {return this.propsFrom()}
+
+        return this.clamp(v)
+      }
+
+      to() {
+        const v = (this.state.dragging ? this.state.toTmp : this.propsTo())
+        if (v == undefined) {return this.propsTo()}
+
+        return this.clamp(v)
+      }
+
+      propsFrom() {
+        return toInt(this.props.from || this.props.min)
+      }
+
+      propsTo() {
+        return toInt(this.props.to || this.props.max)
+      }
+
+      onBeforeMount() {
+        this.state = {
+          dragging: false,
+          fromTmp: this.propsFrom(),
+          toTmp: this.propsTo()
+        }
+      }
+
+      onMounted() {
+        const cmp = this
+
+        const drag = function(event) {
+          const m = d3.scaleLinear().
+            domain([0, cmp.svgWidth()]).
+            range([cmp.props.min, cmp.props.max]).
+            clamp(true)
+
+          cmp.state.dragging = true
+
+          const value = Math.round(m(event.x))
+          const side = (this.classList.contains('from') ? 'fromTmp' : 'toTmp')
+          cmp.update({[side]: value})
+
+          if (side == 'fromTmp' && value > cmp.to()) {
+            cmp.update({toTmp: value})
+          }
+
+          if (side == 'toTmp' && value < cmp.from()) {
+            cmp.update({fromTmp: value})
+          }
+        }
+
+        const end = (event) => {
+          let newFrom = cmp.state.fromTmp || cmp.props.min
+          if (newFrom === cmp.props.min) newFrom = null
+
+          let newTo = cmp.state.toTmp || cmp.props.max
+          if (newTo === cmp.props.max) newTo = null
+
+          cmp.props.onInputsChanged({
+            from: newFrom,
+            to: newTo
+          })
+          cmp.state.stopDragging = true
+          // cmp.update({stopDragging: true})
+        }
+
+        d3.select(this.root).
+          selectAll(".controls circle").
+          call(d3.drag().on('drag', drag).on('end', end).container(this.root))
+      }
+
+      onBeforeUpdate(props, state) {
+        // get updated range from parent component
+        if (!state.dragging) {
+          state.fromTmp = props.from
+          state.toTmp = props.to
+        }
+
+        // dragging mode is not stopped immediately to prevent a brief jump-back
+        // of the slider to the previous position because the new url value hasn't
+        // been propagated to this component yet
+        if (state.stopDragging) {
+          state.stopDragging = false
+          state.dragging = false
+        }
+      }
+
+      activeBin(index) {
+        return (
+          this.binIndexToPercent(index) >= this.valueToPercent(this.from()) &&
+          this.binIndexToPercent(index) <= this.valueToPercent(this.to())
+        )
+      }
+
+      valueToPercent(value) {
+        const m = d3.scaleLinear().
+          domain([this.props.min, this.props.max]).
+          range([0, 100])
+
+        return m(value)
+      }
+
+      binToHeight(value) {
+        const m = d3.scaleLinear().
+          domain([0, this.maxBin()]).
+          range([0, 80])
+
+        const result = m(value)
+
+        return result > 0 && result < 1 ? 1 : result
+      }
+
+      binIndexToPercent(index) {
+        const m = d3.scaleLinear().
+          domain([0, this.props.bins.length - 1]).
+          range([0, 100])
+
+        return m(index)
+      }
+
+      maxBin() {
+        const values = this.props.bins
+        return Math.max(...values)
+      }
+
+      isSparse() {
+        const values = this.props.bins
+        const sum = values.reduce((acc, e) => acc + e, 0)
+        return sum < 20
+      }
+
+      svgWidth() {
+        return this.root.querySelector('.graph').getBoundingClientRect().width
+      }
+
+      svgHeight() {
+        return this.root.querySelector('.graph').getBoundingClientRect().height
+      }
+    }
+  </script>
+</range-control>
