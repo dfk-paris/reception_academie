@@ -121,6 +121,7 @@ const matchesAcquisitionDate = (r, criteria) => {
   let year = null
   if (adate['date']) year = adate['date'][0]
   if (adate['year_range']) year = adate['year_range'][1]
+  if (adate['year']) year = adate['year']
 
   let from = criteria['from']
   if (from) {
@@ -173,23 +174,18 @@ const aggregateRoom = (hierarchy, record) => {
   }
 }
 
-const aggregateAcquisitionDate = (buckets, value) => {
-  if (!value) return
+const aggregateAcquisitionDate = (buckets, adate) => {
+  if (!adate) return
 
-  let v = null
+  let year = null
+  if (adate['date']) year = adate['date'][0]
+  if (adate['year_range']) year = adate['year_range'][1]
+  if (adate['year']) year = adate['year']
 
-  if (value['date']) {
-    v = value['date'][0]
-  }
+  if (!year) return
 
-  if (value['year_range']) {
-    v = value['year_range'][1]
-  }
-
-  if (!v) return
-
-  buckets['adate'][v] = buckets['adate'][v] || 0
-  buckets['adate'][v] += 1
+  buckets['adate'][year] = buckets['adate'][year] || 0
+  buckets['adate'][year] += 1
 }
 
 const dropBucket = (buckets, key, value) => {

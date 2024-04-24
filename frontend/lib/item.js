@@ -50,9 +50,11 @@ export default class Item {
     if (!value) return null
     if (!value['date']) return null
 
+    value['date'][1] -= 1
+
     const date = new Date(...value['date'])
 
-    const format = "%d %B %Y"
+    const format = "%e %B %Y"
     return toDate[i18n.locale](format, date)
   }
 
