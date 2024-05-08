@@ -184,6 +184,15 @@ export default class Item {
     return this.d['original'][i18n.locale]
   }
 
+  hasAnyImage() {
+    return (
+      this.hasImage() ||
+      this.hasCopy() ||
+      this.hasStudy() ||
+      this.hasOriginal()
+    )
+  }
+
   plateLink() {
     return this.d['plate_link']
   }

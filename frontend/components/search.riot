@@ -4,7 +4,18 @@
     href="#!"
   >{t('reset')}</a>
   <div class="dfk-sans-serif fw-bold mb-4">
-    {cap(t('search_criteria'))}
+    <help-trigger class="mt-1" />
+  </div>
+
+  <div class="d-flex">
+    <dfk-input
+      placeholder={cap(t('fulltext_search'))}
+      type="text"
+      name="terms"
+      update-handler={onInputDelayed}
+      value={props.criteria.terms}
+      class="flex-grow-2"
+    />
   </div>
 
   <div
@@ -16,21 +27,8 @@
     min={minAcquisitonDate()}
     max={maxAcquisitonDate()}
     bins={props.results.buckets.adate.buckets.map(e => e['doc_count'])}
-    class="mb-4"
+    class="my-4"
   />
-
-  <div class="d-flex">
-    <dfk-input
-      placeholder={cap(t('fulltext_search'))}
-      type="text"
-      name="terms"
-      update-handler={onInputDelayed}
-      value={props.criteria.terms}
-      class="flex-grow-2 mr-3"
-    />
-
-    <help-trigger class="mt-1" />
-  </div>
 
   <div if={hasActiveFilters()} class="dfkv-active-filters">
     <div class="dfkv-bar"></div>
@@ -44,7 +42,7 @@
     />
   </div>
 
-  <div class="dfk-sans-serif fw-bold my-6 fs-2">{cap(t('filters'))}</div>
+  <div class="dfk-sans-serif fw-bold my-6 fs-2"></div>
 
   <dfk-facet
     if={props.results}
