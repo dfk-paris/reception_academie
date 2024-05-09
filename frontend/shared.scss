@@ -146,6 +146,12 @@ results {
     top: 30px;
     right: 70px;
   }
+
+  help-trigger {
+    transform: scale(0.75);
+    margin-top: -3px;
+    margin-left: 3px;
+  }
 }
 
 record {
@@ -254,11 +260,6 @@ record {
 
     p {
       color: $text-color;
-    }
-
-    help-trigger {
-      position: absolute;
-      right: 0px;
     }
   }
 

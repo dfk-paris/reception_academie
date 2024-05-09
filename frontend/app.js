@@ -27,8 +27,8 @@ Url.setForceFragment()
 
 i18n.fetch(`${config.STATIC_URL}/translations.json`).then(data => {
   const url = document.location.href
-  // i18n.setLocale(localeFromUrl())
-  i18n.setLocale('en')
+  i18n.setLocale(localeFromUrl())
+  // i18n.setLocale('en')
 
   RiotPlugins.setup(riot)
   riot.install(RiotPlugins.i18n)

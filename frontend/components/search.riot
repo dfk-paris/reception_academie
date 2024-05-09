@@ -27,7 +27,7 @@
     min={minAcquisitonDate()}
     max={maxAcquisitonDate()}
     bins={props.results.buckets.adate.buckets.map(e => e['doc_count'])}
-    class="my-4"
+    class="mt-4 mb-3"
   />
 
   <div if={hasActiveFilters()} class="dfkv-active-filters">

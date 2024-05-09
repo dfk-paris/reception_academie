@@ -18,8 +18,6 @@
         />
 
         <div class="h-100 d-flex flex-column justify-content-between ml-4">
-          <help-trigger class="d-print-none align-self-start" />
-
           <size-indicator
             if={props.item.hasImage()}
             wh={props.item.wh()}
@@ -99,8 +97,6 @@
   </ul>
 
   <div class="dfk-expose">
-    <help-trigger class="d-print-none" />
-
     <ul class="fields type">
       <li class="d-flex">
         <div class="label">{cap(t('type'))}</div>
@@ -116,8 +112,6 @@
     <div class="location mt-4 d-flex">
       <div class="label">
         {cap(t('location'))}
-        
-        <help-trigger class="d-print-none position-static ml-2" />
       </div>
 
       <div>
