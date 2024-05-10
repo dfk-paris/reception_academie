@@ -4,6 +4,11 @@
 @import '@dfk-paris/frontend/src/index';
 
 $text-color: #333333;
+$green: #009bb5;
+
+.text-primary {
+  color: $green;
+}
 
 dfk-facet {
   @extend facet;
@@ -147,9 +152,25 @@ results {
     right: 70px;
   }
 
+  dfk-icon[type='braces'] {
+    svg {
+      position: relative;
+      top: -3px;
+      height: 23px;
+    }
+  }
+
+  dfk-icon[type='download'] {
+    svg {
+      position: relative;
+      top: -4px;
+      height: 23px;
+    }
+  }
+
   help-trigger {
     transform: scale(0.75);
-    margin-top: -3px;
+    margin-top: -4px;
     margin-left: 3px;
   }
 }
@@ -599,12 +620,17 @@ help-trigger {
     width: 25px;
     height: 25px;
     border-radius: 15px;
-    background-color: $tag-gray;
+    background-color: $text-color;
+    color: white !important;
 
     padding-top: 2px;
     padding-left: 9px;
     text-decoration: none;
     font-weight: 700;
+  }
+
+  a:hover {
+    color: white !important;
   }
 }
 
