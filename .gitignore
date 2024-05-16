@@ -2,4 +2,6 @@
 /public/
 /tmp/
 
+/data/images.*
+
 .~lock*
