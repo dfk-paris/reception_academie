@@ -1,10 +1,6 @@
 <record-viewer class="pt-5 mr-5">
   <div class="container" if={state.item}>
     <div class="d-flex mb-6 d-print-none">
-      <watchlist-toggle
-        class="d-print-none"
-        id={state.item.id()}
-      />
       <a
         class="mr-2"
         onclick={event => print(event)}
