@@ -70,11 +70,19 @@ const roomUrl = (inv, room) => {
   return `${app_url}#/maps/${id}`
 }
 
+const scrollToTop = () => {
+  const element = document.querySelector("[is='app']")
+  const top = element.offsetTop
+
+  window.scrollTo({top, behavior: 'smooth'})
+}
+
 export {
   baseUrl,
   indexFor,
   localeFromUrl,
   open,
   params,
-  roomUrl
+  roomUrl,
+  scrollToTop
 }

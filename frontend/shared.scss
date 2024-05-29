@@ -63,16 +63,6 @@ room-facet {
     font-weight: 400;
   }
 
-  &[type='inventory'] {
-    .rounded {
-      background-color: #A4A3A3;
-    }
-    
-    .label {
-      font-weight: bold;
-    }
-  }
-
   dfk-icon[type='triangle-up'],
   dfk-icon[type='triangle-down'] {
     &:hover polyline {
@@ -216,6 +206,11 @@ record {
 
       a {
         text-decoration: underline;
+      }
+
+      small {
+        display: block;
+        margin-left: -50px;
       }
     }
   }
@@ -685,6 +680,10 @@ help-trigger {
 current-map {
   display: block;
   width: 100%;
+
+  .leaflet-top {
+    z-index: 400;
+  }
 }
 
 [is='range-control'] {

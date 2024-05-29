@@ -237,6 +237,15 @@ class Ra::Import
     {}
   end
 
+  def fetch_descs(r)
+    results = ['guerin', 'argenville'].map do |s|
+      next unless r[s]
+      r[s]['description_unident_pieces']
+    end
+
+    results.compact
+  end
+
   def fetch_acquisition_date(r)
     results = ['argenville', 'guerin'].map do |s|
       next unless r[s]
@@ -336,7 +345,7 @@ class Ra::Import
         'original' => fetch_original(r),
         'notes' => fetch_notes(r),
         'plate_link' => fetch(r, 'plate_link'),
-        'description_unident' => r.values.map{|v| v['description_unident_pieces']},
+        'description_unident' => fetch_descs(r),
         'acquisition_date' => fetch_acquisition_date(r)
       }
 
@@ -497,14 +506,14 @@ class Ra::Import
       dir = File.dirname(target)
       unless File.exist?(target)
         system 'mkdir', '-p', dir
-        system 'magick', 'convert', f, '-resize', '1280x1280>', target
+        system 'magick', f, '-resize', '1280x1280>', target
       end
 
       target = "data/images.normalized.640/#{tier}/#{inventory}.#{id}.jpg"
       dir = File.dirname(target)
       unless File.exist?(target)
         system 'mkdir', '-p', dir
-        system 'magick', 'convert', f, '-resize', '640x640>', target
+        system 'magick', f, '-resize', '640x640>', target
       end
     end
 

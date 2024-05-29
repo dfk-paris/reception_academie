@@ -10,7 +10,9 @@
     <div class="w-70 ml-5">
       <template if={state.results}>
         <div class="d-flex justify-content-between result-width flex-wrap">
-          <div class="mr-3 mb-3 text-primary">{state.results.total}</div>
+          <div class="mr-3 mb-3 {anyCriteria() && 'text-primary'}">
+            {state.results.total}
+          </div>
           <dfk-pagination
             class="m-auto mb-5"
             page={state.results.page}
@@ -45,7 +47,7 @@
   <script>
     import {UrlSearch, Url} from '@wendig/lib'
     import search from '../lib/search.instance'
-    import {open, indexFor, params} from '../lib/util'
+    import {open, indexFor, params, scrollToTop} from '../lib/util'
 
     export default class {
       constructor() {
@@ -66,6 +68,8 @@
       }
 
       onSearch(p) {
+        scrollToTop()
+
         search.query(p).then(data => {
           this.update({
             results: data
@@ -127,6 +131,10 @@
           open(record)
           this.state.transitioning = false
         }
+      }
+
+      anyCriteria() {
+        return Object.keys(this.state['criteria'] || {}).length
       }
 
       toNextRecord(id) {

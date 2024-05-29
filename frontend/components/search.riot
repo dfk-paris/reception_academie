@@ -1,15 +1,15 @@
 <search>
   <a
-    class="dfkv-reset float-right fw-bold bg-gray text-decoration-none py-1 px-2"
+    class="dfkv-reset float-right fw-bold"
     href="#!"
   >{t('reset')}</a>
   <div class="dfk-sans-serif fw-bold mb-4">
     <help-trigger class="mt-1" />
   </div>
 
-  <div if={hasActiveFilters()} class="dfkv-active-filters my-3">
+  <div if={hasActiveFilters()} class="dfkv-active-filters my-3 mb-6">
     <div class="dfkv-bar"></div>
-    <!-- div class="dfk-sans-serif fw-bold my-4 fs-2">{cap(t('your_selection'))}</div -->
+    <div class="dfk-sans-serif fw-bold my-4 fs-2">{cap(t('your_selection'))}</div>
 
     <dfk-active-filters
       criteria={props.criteria}
@@ -39,7 +39,7 @@
     min={minAcquisitonDate()}
     max={maxAcquisitonDate()}
     bins={props.results.buckets.adate.buckets.map(e => e['doc_count'])}
-    class="mt-4 mb-2"
+    class="mt-4 mb-4"
   />
 
   <div class="dfk-sans-serif fw-bold my-4 fs-2"></div>

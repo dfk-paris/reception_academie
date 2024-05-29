@@ -71,7 +71,7 @@ export default class Item {
     const other = this.d['after_other_artist']
 
     if (other) {
-      result = `${result} (after ${other})`
+      result = `${result} (${i18n.translate('after')} ${other})`
     }
 
     return result
