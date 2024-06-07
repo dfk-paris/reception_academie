@@ -74,7 +74,7 @@ const scrollToTop = () => {
   const element = document.querySelector("[is='app']")
   const top = element.offsetTop
 
-  window.scrollTo({top, behavior: 'smooth'})
+  window.scrollTo({top})
 }
 
 export {

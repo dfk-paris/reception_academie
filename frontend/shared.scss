@@ -448,6 +448,8 @@ dims.large .large {
 // fly in
 
 fly-in {
+  --dfk-fly-in-width-collapsed: 4vw;
+
   li {
     position: relative;
     margin-top: 3em;
@@ -491,6 +493,29 @@ fly-in {
     &::before {
       content: '' !important;
       margin-left: 0 !important;
+    }
+
+    > ul {
+      li {
+        border-width: 0;
+        margin-top: 0;
+        margin-bottom: 0.75em;
+        padding-bottom: 0;
+
+        p {
+          margin-bottom: 0 !important;
+        }
+
+        .icon {
+          min-width: 50px;
+
+          svg, dfk-icon {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+          }
+        }
+      }
     }
   }
 }

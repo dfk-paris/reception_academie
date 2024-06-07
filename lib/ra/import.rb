@@ -519,6 +519,7 @@ class Ra::Import
 
     system 'rsync', '-a', 'data/images.normalized/', 'public/images'
     system 'rsync', '-a', 'data/images.normalized.640/', 'public/images.640/'
+    system 'rsync', '-a', 'data/help/', 'public/help/'
   end
 
   def t(key)

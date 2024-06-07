@@ -8,39 +8,131 @@
         >
           <dfk-icon type="arrow-right" />
         </a>
-        <div class="h-100 w-100 pl-7 overflow-y-scroll">
+        <div class="h-100 w-100 pl-5 overflow-y-scroll">
           <h2 class="mt-7">{cap(t('help'))}</h2>
 
+          <div data-id="intro" class="mr-7"></div>
+
           <ul class="pl-0 ml-0 mt-6 mr-7 mb-7">
-            <li>
-              <div class="header fw-bold mb-3">{cap(t('inventories_and_rooms'))}</div>
-              <div class="description" data-id="i_and_r"></div>
-            </li>
-
-            <li>
-              <div class="description" data-id="dims"></div>
-
-              <div class="mt-3 pt-3 mb-3">
-                <size-indicator
-                  wh={[80, 120]}
-                  ref-height={170.0}
-                  render-height={80}
+            <li class="d-flex position-relative m-0 pb-5 pt-5">
+              <div class="w-30 p-1 pr-2">
+                <img
+                  class="d-block w-100"
+                  src="{config['STATIC_URL']}/help/input.png"
                 />
               </div>
+              <div class="w-70 pl-4" data-id="fulltext"></div>
+            </li>
+
+            <li class="d-flex position-relative m-0 pb-5 pt-5">
+              <div class="w-30 p-1 pr-2">
+                <img
+                  class="d-block w-100"
+                  src="{config['STATIC_URL']}/help/range-slider.png"
+                />
+              </div>
+              <div class="w-70 pl-4" data-id="timeline"></div>
+            </li>
+
+            <li class="d-flex position-relative m-0 pb-5 pt-5">
+              <div class="w-30 p-1 pr-2">
+                <img
+                  class="d-block w-100"
+                  src="{config['STATIC_URL']}/help/filters.png"
+                />
+              </div>
+              <div class="w-70 pl-4" data-id="filters"></div>
+            </li>
+
+            <li class="d-flex position-relative m-0 pb-5 pt-5">
+              <div class="w-30 p-1 pr-2">
+                <img
+                  class="d-block w-100"
+                  src="{config['STATIC_URL']}/help/rooms.png"
+                />
+              </div>
+              <div class="w-70 pl-4" data-id="rooms"></div>
+            </li>
+
+            <li class="d-flex position-relative m-0 pb-5 pt-5">
+              <div class="w-30 p-1 pr-2">
+                <img
+                  class="d-block w-100"
+                  src="{config['STATIC_URL']}/help/map.png"
+                />
+              </div>
+              <div class="w-70 pl-4" data-id="map"></div>
+            </li>
+
+            <li class="d-flex position-relative m-0 pb-5 pt-5">
+              <div class="w-30 p-1 pr-2">
+                <img
+                  class="d-block"
+                  style="width: 40px"
+                  src="{config['STATIC_URL']}/help/reset.png"
+                />
+              </div>
+              <div class="w-70 pl-4" data-id="reset"></div>
+            </li>
+
+            <li class="d-flex position-relative m-0 pb-5 pt-5">
+              <div class="w-30 p-1 pr-2">
+                <img
+                  class="d-block w-100"
+                  src="{config['STATIC_URL']}/help/size.png"
+                />
+              </div>
+              <div class="w-70 pl-4" data-id="scale"></div>
             </li>
 
             <li>
-              <div class="item">
-                <dfk-icon type="book" />
-              </div>
-              <div class="description" data-id="book"></div>
-            </li>
+              <div data-id="icons"></div>
 
-            <li>
-              <div class="item">
-                <dfk-icon type="print" />
-              </div>
-              <div class="description" data-id="print"></div>
+              <ul class="pl-0 mt-5">
+                <li class="d-flex pb-0">
+                  <div class="icon">
+                    <dfk-icon type="print" />
+                  </div>
+                  <div data-id="print"></div>
+                </li>
+
+                <li class="d-flex pb-0">
+                  <div class="icon">
+                    <dfk-icon type="braces" />
+                  </div>
+                  <div data-id="json"></div>
+                </li>
+
+                <li class="d-flex pb-0">
+                  <div class="icon">
+                    <dfk-icon type="download" />
+                  </div>
+                  <div data-id="dataset"></div>
+                </li>
+
+                <li class="d-flex pb-0">
+                  <div class="icon">
+                    <dfk-icon type="external-link" />
+                  </div>
+                  <div data-id="catalogue"></div>
+                </li>
+
+                <li class="d-flex pb-0">
+                  <div class="icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" class="w-100">
+                      <path d="M62 50c0-.664-.536-1.2-1.2-1.2H3.2c-.664 0-1.2.536-1.2 1.2 0 .664.536 1.2 1.2 1.2h57.6c.664 0 1.2-.536 1.2-1.2zm-15.686-6.18l1.138 1.38h-2.29l1.152-1.38zM31.9 38.074l5.937 7.126H25.963l5.937-7.126zM16.363 45.2l1.237-1.484 1.237 1.484h-2.474zm-2.812-6.343l2.485 2.983-2.8 3.36H8.302l5.25-6.343zm4.554-5.503l2.452 3.063-2.957 3.547-2.491-2.989 2.996-3.621zm4.914-5.937l2.518 3.023-3.412 4.094-2.455-3.07 3.35-4.047zm7.402-2.837l-3.32 3.984-2.525-3.028 3.319-4.01 2.526 3.054zm4.12-4.945l-2.559 3.071-2.53-3.064L32 16.564l2.542 3.071zm4.784 5.78l-2.563 3.076-3.224-3.902 2.561-3.072 3.226 3.899zm5.005 6.05l-2.514 3.144-3.498-4.234 2.563-3.078 3.449 4.168zm-7.576.785l3.53 4.273-3.21 4.011-3.611-4.334 3.291-3.95zm-8.091-1.81l3.312-3.976 3.224 3.903-3.299 3.957-3.237-3.884zm-1.836 9.972l-3.17-3.964 3.443-4.132 3.237 3.884-3.51 4.212zM21.963 45.2l-2.8-3.36 2.924-3.51 3.171 3.965-2.421 2.905h-.874zm19 0l-2.32-2.783 3.203-4.003 2.911 3.522-2.72 3.264h-1.074zm7.928-8.225l-2.571 3.087-2.943-3.562 2.518-3.146 2.996 3.621zM55.7 45.2h-5.134l-2.69-3.256 2.574-3.087 5.25 6.343zm-41.335 2.4H60.8l-8.788-10.619-1.557-1.881-3.03-3.66-1.563-1.89-3.417-4.128-1.558-1.883-3.225-3.898-.33-.396L32 12.8l-5.324 6.432-.338.408-8.2 9.91-1.563 1.89-3.03 3.66-1.557 1.881L3.2 47.6h11.164z" />
+                    </svg>
+                  </div>
+                  <div data-id="plans"></div>
+                </li>
+
+                <li class="d-flex pb-0">
+                  <div class="icon">
+                    <dfk-icon type="book" />
+                  </div>
+                  <div data-id="book"></div>
+                </li>
+              </ul>
             </li>
           </ul>
         </div>
@@ -48,9 +140,8 @@
     </div>
 
     <div class="fly-in-closed">
-      <div class="h-100 d-flex align-items-center p-2">
+      <div class="h-100 d-flex align-items-center p-4">
         <a
-          class="ml-2"
           onclick={event => selfToggle(event)}
         >
           <dfk-icon type="arrow-left" />
@@ -60,15 +151,16 @@
   </dfk-fly-in>
 
   <script>
+    import config from '../lib/dotenv'
     import DfkFlyIn from '@dfk-paris/frontend/src/components/fly_in.riot'
     import SizeIndicator from './size_indicator.riot'
-
 
     export default class {
       static components = {DfkFlyIn, SizeIndicator}
 
       constructor() {
         this.toggle = this.toggle.bind(this)
+        this.config = config
       }
 
       onMounted() {
