@@ -130,7 +130,7 @@ const matchesAcquisitionDate = (r, criteria) => {
   }
 
   let to = criteria['to']
-  if (from) {
+  if (to) {
     to = parseInt(to)
     if (to < year) return false
   }
