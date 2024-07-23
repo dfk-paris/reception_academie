@@ -19,6 +19,7 @@ import Results from './components/results.riot'
 import RoomFacet from './components/room_facet.riot'
 import RoutedModal from './components/routed_modal.riot'
 import RangeControl from './components/range_control.riot'
+import Sample from './components/sample.riot'
 
 import config from './lib/dotenv'
 import {localeFromUrl} from './lib/util'
@@ -53,6 +54,7 @@ i18n.fetch(`${config.STATIC_URL}/translations.json`).then(data => {
   riot.register('room-facet', RoomFacet)
   riot.register('routed-modal', RoutedModal)
   riot.register('range-control', RangeControl)
+  riot.register('sample', Sample)
 
   riot.mount('[is]')
 })

@@ -1,0 +1,40 @@
+<sample>
+  <div
+    is="current-map"
+    if={props.widget == 'current-map'}
+    style="height: 300px; margin-top: 3em; margin-bottom: 3em"
+  />
+
+  <div
+    is="room-map"
+    if={props.widget == 'room-map'}
+    map-id={props.dataId}>
+  />
+
+  <template if={state.data}>
+    <div
+      is="record"
+      if={props.widget == 'record'}
+      item={state.data}>
+    />
+  </template>
+
+  <script>
+    import search from '../lib/search.instance'
+    import Record from './record.riot'
+    import Item from '../lib/item.js'
+    import RoomMap from './room_map.riot'
+
+    export default class {
+      static components = {Record, RoomMap}
+
+      onBeforeMount(props) {
+        if (props.widget == 'record') {
+          search.query({id: props.dataId}).then(data => {
+            this.update({data: new Item(data.results[0])})
+          })
+        }
+      }
+    }
+  </script>
+</sample>
