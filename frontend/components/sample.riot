@@ -2,22 +2,20 @@
   <div
     is="current-map"
     if={props.widget == 'current-map'}
-    style="height: 300px; margin-top: 3em; margin-bottom: 3em"
+    style="height: 400px; margin-top: 3em; margin-bottom: 3em"
   />
 
   <div
     is="room-map"
     if={props.widget == 'room-map'}
-    map-id={props.dataId}>
+    map-id={props.dataId}
   />
 
-  <template if={state.data}>
-    <div
-      is="record"
-      if={props.widget == 'record'}
-      item={state.data}>
-    />
-  </template>
+  <div
+    is="record"
+    if={state.data && props.widget == 'record'}
+    item={state.data}
+  />
 
   <script>
     import search from '../lib/search.instance'
@@ -30,8 +28,11 @@
 
       onBeforeMount(props) {
         if (props.widget == 'record') {
-          search.query({id: props.dataId}).then(data => {
-            this.update({data: new Item(data.results[0])})
+          const id = parseInt(props.dataId)
+          search.query({id: id}).then(data => {
+            const item = new Item(data.results[0])
+            console.log(item)
+            this.update({data: item})
           })
         }
       }
