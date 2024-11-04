@@ -164,9 +164,12 @@
       }
 
       maxAcquisitonDate() {
-        const years = this.props.results.buckets.adate.buckets.map(e => e['key'])
+        return 1793
 
-        return Math.max(...years)
+
+        // const years = this.props.results.buckets.adate.buckets.map(e => e['key'])
+        // 
+        // return Math.max(...years)
       }
     }
   </script>

@@ -10,7 +10,7 @@ GEM
     kramdown (2.4.0)
       rexml
     method_source (1.0.0)
-    nokogiri (1.14.1-x86_64-linux)
+    nokogiri (1.16.7-x86_64-linux)
       racc (~> 1.4)
     pry (0.14.2)
       coderay (~> 1.1)
