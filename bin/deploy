@@ -4,7 +4,7 @@ export APP_ENV=production
 export APP_URL_EN="https://www.dfk-paris.org/en/page/academie-database-3846.html"
 export APP_URL_DE="https://www.dfk-paris.org/de/page/academie-database-3846.html"
 export APP_URL_FR="https://www.dfk-paris.org/fr/page/academie-database-3846.html"
-export STATIC_URL="https://static.dfkg.org/ooV9no9ood"
+export STATIC_URL="https://static.dfk-paris.org/ooV9no9ood"
 export USE_SSL="true"
 
 npm run import
