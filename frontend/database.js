@@ -174,6 +174,16 @@ const aggregateRoom = (hierarchy, record) => {
   }
 }
 
+const emptyAcqusitionDateBucket = (min, max) => {
+  let result = {}
+
+  for (let i = min; i <= max; i++) {
+    result[i] = result[i] || 0
+  }
+
+  return result
+}
+
 const aggregateAcquisitionDate = (buckets, adate) => {
   if (!adate) return
 
@@ -214,7 +224,7 @@ database.action('query', data => {
     'collection': {},
     'artists': {},
     'location': {},
-    'adate': {}
+    'adate': emptyAcqusitionDateBucket(1648, 1793)
   }
 
   let roomHierarchy = {}

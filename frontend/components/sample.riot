@@ -31,7 +31,6 @@
           const id = parseInt(props.dataId)
           search.query({id: id}).then(data => {
             const item = new Item(data.results[0])
-            console.log(item)
             this.update({data: item})
           })
         }

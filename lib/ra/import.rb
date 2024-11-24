@@ -349,6 +349,8 @@ class Ra::Import
         'acquisition_date' => fetch_acquisition_date(r)
       }
 
+      next unless record['acquisition_date']
+
       apply_40027(record, id)
 
       @unified << record.compact
@@ -615,7 +617,7 @@ class Ra::Import
 
     def dfk_persons
       @dfk_persons ||= begin
-        response = Faraday.get('https://static.dfkg.org/dfk_persons/entities.json')
+        response = Faraday.get('https://static.dfk-paris.org/dfk_persons/entities.json')
         data = JSON.parse(response.body)
 
         lookup = {}
