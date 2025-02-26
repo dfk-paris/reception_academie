@@ -349,7 +349,7 @@ class Ra::Import
         'acquisition_date' => fetch_acquisition_date(r)
       }
 
-      next unless record['acquisition_date']
+      # next unless record['acquisition_date']
 
       apply_40027(record, id)
 
