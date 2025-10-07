@@ -32,7 +32,7 @@
 
           <img class="w-100 mb-2" src="{props.item.studyImage()}" />
           <br />
-          
+
           <small>
             <raw class="d-block text-end" html={props.item.studyCaption()} />
           </small>
@@ -43,7 +43,7 @@
 
           <img class="w-100 mb-2" src="{props.item.copyImage()}" />
           <br />
-          
+
           <small>
             <raw html={props.item.copyCaption()} />
           </small>
@@ -54,7 +54,7 @@
 
           <img class="w-100 mb-2" src="{props.item.originalImage()}" />
           <br />
-          
+
           <small>
             <raw html={props.item.originalCaption()} />
           </small>
@@ -160,7 +160,7 @@
 
           <a
             if={b.biblio['IIIF manifest']}
-            href="https://static.dfkg.org/viewers_poc/mirador/#?manifest={b.biblio['IIIF manifest']}&canvas={b.canvas_id}"
+            href="{config.MIRADOR_URL}#?manifest={b.biblio['IIIF manifest']}&canvas={b.canvas_id}"
             target="_blank"
           >
             <dfk-icon type="book" />
@@ -297,6 +297,7 @@
         this.cap = util.capitalize
         this.baseUrl = baseUrl
         this.roomUrl = roomUrl
+        this.config = config
       }
 
       primaryUrl() {
